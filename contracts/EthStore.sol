@@ -52,6 +52,11 @@ contract EthStore is Ownable {
     _;
   }
 
+  function getIdentity() view public returns (bool isAdministrator, bool isStoreOwner){
+    uint256 storeId = storeOwnerToStoreId[msg.sender];
+    return (msg.sender == owner, storeId >= 0 && storeId < storeCount && stores[storeId].enabled);
+  }
+
   function createStore(address _storeOwner) public onlyOwner {
     // create a store for the store owner
     storeOwnerToStoreId[_storeOwner] = storeCount;

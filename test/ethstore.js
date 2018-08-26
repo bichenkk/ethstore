@@ -186,4 +186,18 @@ contract('EthStore', (accounts) => {
     assert.equal(newProductEnabled, false, 'The product is not disabled.')
   })
 
+  it('should be able to check the identity of an user', async () => {
+    const instance = await EthStore.new()
+    await instance.storeOwnerToStoreId(storeOwner)
+    const creatorResult = await instance.getIdentity()
+    const storeOwnerResult = await instance.getIdentity({ from: storeOwner })
+    const normalUserResult = await instance.getIdentity({ from: normalUser })
+    assert.equal(creatorResult[0], true, 'The creator does not have administrator identity.')
+    assert.equal(creatorResult[1], true, 'The creator does not have store owner identity.')
+    assert.equal(storeOwnerResult[0], false, 'The store owner has administrator identity.')
+    assert.equal(storeOwnerResult[1], true, 'The store owner does not have store owner identity.')
+    assert.equal(normalUserResult[0], false, 'The normal user has administrator identity.')
+    assert.equal(normalUserResult[1], true, 'The normal user has store owner identity.')
+  })
+
 })

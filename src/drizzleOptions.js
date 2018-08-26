@@ -1,4 +1,4 @@
-import SimpleStorage from '../build/contracts/SimpleStorage.json'
+import EthStore from '../build/contracts/EthStore.json'
 
 const drizzleOptions = {
   // web3: {
@@ -9,16 +9,14 @@ const drizzleOptions = {
   //   }
   // },
   contracts: [
-    SimpleStorage,
+    EthStore,
   ],
-  events: {
-    SimpleStorage: [
-      'SetVariable',
-    ],
-  },
-  polls: {
-    blocks: 0,
-  }
+  // events: {
+  //   EthStore: [],
+  // },
+  // polls: {
+  //   blocks: 0,
+  // },
 }
 
 export default drizzleOptions
