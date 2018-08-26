@@ -1,4 +1,4 @@
-# Simple Storage Demo - Truffle + Drizzle + React + Redux
+# EthStore - Dapp on Ethereum
  
 This demo shows the integration of Truffle + Drizzle + React + Redux with the contract Simple Storage. It shows how to read and write into smart contracts from a react dapp.
 

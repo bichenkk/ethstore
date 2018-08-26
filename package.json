@@ -18,6 +18,7 @@
     "contract:test": "truffle test"
   },
   "dependencies": {
+    "@download/blockies": "^1.0.3",
     "antd": "^3.7.3",
     "bignumber.js": "^7.2.1",
     "bowser": "^2.0.0-alpha.4",

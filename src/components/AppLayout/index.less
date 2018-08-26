@@ -1,0 +1,202 @@
+.ethstore-app {
+  min-width: 1000;
+  .header {
+    .navigation-bar {
+      padding: 0 64px 0 64px;
+      height: 64px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .left-part {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        .logo {
+          height: 30px;
+          margin-right: 12px;
+        }
+        .ant-menu {
+          line-height: 63px;
+          border-bottom: 0;
+          .ant-menu-submenu {
+            border-bottom: 0;
+          }
+          .ant-menu-item {
+            border-bottom: 0;
+          }
+        }
+      }
+      .right-part {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        .ant-menu-horizontal {
+          line-height: 63px;
+          border-bottom: 0;
+          .ant-menu-submenu {
+            border-bottom: 0;
+          }
+          .ant-menu-item {
+            padding-right: 0;
+            border-bottom: 0;
+          }
+        }
+      }
+    }
+    .utility-bar {
+      height: 64px;
+      background-color: #000000;
+      padding: 0 64px 0 64px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .balance {
+        color: #ffffff;
+        font-size: 12px;
+        display: flex;
+        align-items: baseline;
+        .balance-value {
+          margin-left: 12px;
+          color: #ffffff;
+          font-size: 14px;
+          .ant-btn {
+            color: #ffffff;
+            margin-left: 12px;
+            background: #000000;
+          }
+        }
+      }
+
+      .tool-bar {
+        .ant-btn {
+          margin-left: 24px;
+          font-size: 24px;
+          background-color: transparent;
+          border: 0;
+          color: white;
+        }
+      }
+    }
+  }
+  .content {
+    margin: 32px 64px 32px 64px;
+    .content-main {
+      margin: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      .sider {
+        min-width: 200px;
+        .filter-section {
+          border-bottom: 1px solid #e8e8e8;
+          padding-bottom: 24px;
+          margin: 0 24px 24px 0;
+          .title {
+            margin-bottom: 12px;
+          }
+          .ant-tag {
+            margin: 6px 0;
+            span {
+              margin-left: 6px;
+              font-size: 10px;
+            }
+          }
+          .more {
+            font-size: 10px;
+            margin: 6px 0;
+            a {
+              text-decoration: underline;
+            }
+          }
+          .information {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            font-size: 12px;
+          }
+        }
+      }
+      .main {
+        flex-grow: 1;
+        .pagination {
+          margin: 0 0 32px 0;
+          text-align: center;
+        }
+      }
+    }
+    .content-recommendation {
+      margin: 0 0 32px 0;
+    }
+  }
+  .footer {
+    .links-bar {
+      border-top: 1px solid #e8e8e8;
+      padding: 24px 64px 0 64px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      .links-section {
+        min-width: 150px;
+        padding: 12px 0;
+        ul {
+          padding: 0;
+          list-style-type: none;
+          li {
+            font-size: 12px;
+            margin: 12px 0;
+          }
+        }
+        &.social-section {
+          ul {
+            li {
+              margin: 12px 12px 12px 0;
+              float: left;
+              font-size: 24px;
+            }
+          }
+        }
+      }
+    }
+    .terms-bar {
+      color: white;
+      height: 80px;
+      padding: 0 64px 0 64px;
+      background-color: #000000;
+      display: flex;
+      align-items: center;
+      .left-part {
+        text-align: left;
+        ul {
+          padding: 0;
+          list-style-type: none;
+          li {
+            float: left;
+            margin-right: 12px;
+            a {
+              color: rgba(255, 255, 255, 0.5);
+              &:hover {
+                color: white;  
+              }
+            }
+          }
+        }
+      }
+      .center-part {
+        text-align: center;
+        .logo {
+          height: 20px;
+        }
+      }
+      .right-part {
+        text-align: right;
+      }
+    }
+  }
+}

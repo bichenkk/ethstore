@@ -17,7 +17,7 @@ const configureStore = () => {
   const middlewares = [thunkMiddleware, sagaMiddleware]
   if (process.env.NODE_ENV !== 'production') {
     middlewares.push(require('redux-immutable-state-invariant').default()) // eslint-disable-line
-    middlewares.push(require('redux-logger').default) // eslint-disable-line
+    // middlewares.push(require('redux-logger').default) // eslint-disable-line
   }
 
   const storeEnhancers = compose(
