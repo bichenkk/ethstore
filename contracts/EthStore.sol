@@ -9,7 +9,7 @@ contract EthStore is Ownable {
 
   event NewStore(uint256 id, address storeOwner);
   event NewProduct(uint256 id, uint256 storeId);
-  event NewTransaction(address buyer, uint256 productId, uint256 price);
+  event NewTransaction(address buyer, uint256 productId);
 
   struct Store {
     uint256 id; // start from 1
@@ -32,15 +32,26 @@ contract EthStore is Ownable {
     string imageUrl;
   }
 
+  struct Transaction {
+    uint256 id; // start from 1
+    uint256 storeId;
+    uint256 productId;
+    uint256 price;
+    address buyer;
+  }
+
   mapping(address => uint256) public addressToBalance;
   mapping (address => uint256) public storeOwnerToStoreId;
   mapping (uint256 => uint256[]) public storeIdToProductIds;
   uint256 public storeCount = 0;
   uint256 public productCount = 0;
+  uint256 public transactionCount = 0;
   Store[] public stores;
   Product[] public products;
+  Transaction[] public transactions;
 
   constructor() public {
+    // create sample store coldWalletStore
     createStore(msg.sender);
     editStore("Cold Wallet Store", "We sell cold wallets!", "https://binatir.com/assets/customised/avatar-kk.jpg");
     addProduct(
@@ -67,7 +78,35 @@ contract EthStore is Ownable {
       "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/wallet-trezor-model-t.jpg",
       3 ether,
       10);
+    addProduct(
+      "Trezor One Black + Cryptosteel",
+      "Keep your coins double protected! An ultimate bundle for crypto-beginners and hodlers alike. Get the TREZOR One in black, in a convenient package with a damage-resistant vault for your recovery seed.",
+      "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/wallet-trezor-one-cryptosteel.jpg",
+      10 ether,
+      15);
+    addProduct(
+      "Trezor Model T + Cryptosteel",
+      "Keep your coins double protected! An ultimate bundle for crypto-beginners and hodlers alike. Get the Trezor model T, in a convenient package with a damage-resistant vault for your recovery seed.",
+      "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/wallet-trezor-t-cryptosteel.jpg",
+      20 ether,
+      15);
+    // disable last product Trezor Model T + Cryptosteel for testing
     enableProduct(productCount, false);
+
+    // create sample store eventTicketStore
+    createStore(address(0));
+    Store storage eventTicketStore = stores[1];
+    eventTicketStore.name = "Event Ticket Store";
+    eventTicketStore.description = "We sell event tickets!";
+    eventTicketStore.imageUrl = "https://binatir.com/assets/customised/avatar-kk.jpg";
+    uint256 product1Id = productCount + 1;
+    storeIdToProductIds[eventTicketStore.id].push(product1Id);
+    productCount = products.push(Product(product1Id, eventTicketStore.id, 10 ether, 0, true, "EDCON Paris 17-18 Feb", "Ethereum event", "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/event-edcon.png"));
+    eventTicketStore.productCount = eventTicketStore.productCount.add(1);
+    uint256 product2Id = productCount + 1;
+    storeIdToProductIds[eventTicketStore.id].push(product2Id);
+    productCount = products.push(Product(product2Id, eventTicketStore.id, 5 ether, 5, true, "ETHIS Hong Kong 8 September", "Ethereum event", "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/event-ethis.png"));
+    eventTicketStore.productCount = eventTicketStore.productCount.add(1);
   }
 
   modifier onlyStoreOwner() {
@@ -138,11 +177,13 @@ contract EthStore is Ownable {
     product.count = product.count.sub(1);
     Store storage store = stores[product.storeId.sub(1)];
     addressToBalance[store.storeOwner] = addressToBalance[store.storeOwner].add(product.price);
+    uint256 transactionId = transactionCount.add(1);
+    transactionCount = transactions.push(Transaction(transactionId, store.id, product.id, product.price, msg.sender));
+    emit NewTransaction(msg.sender, product.id);
     // refund extra amount
     if (msg.value > product.price) {
       msg.sender.transfer(msg.value.sub(product.price));
     }
-    emit NewTransaction(msg.sender, product.id, product.price);
   }
 
   function withdrawBalance() public {

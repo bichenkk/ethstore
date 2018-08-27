@@ -33,7 +33,7 @@ class Home extends React.Component {
     try {
       await this.EthStore.methods.purchaseProduct(productId).send({
         value: productPrice,
-        gasLimit: '100000',
+        gasLimit: '500000',
       })
     } catch (error) {
       message.error(error.message)

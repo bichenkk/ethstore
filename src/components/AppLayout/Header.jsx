@@ -22,7 +22,7 @@ class Header extends React.Component {
 
   async handleWithdrawButtonOnClick() {
     await this.EthStore.methods.withdrawBalance().send({
-      gasLimit: '100000',
+      gasLimit: '500000',
     })
   }
 

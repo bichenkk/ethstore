@@ -110,6 +110,10 @@ contract('EthStore', (accounts) => {
     // console.log('user3BalanceAfterPurchase', user3BalanceAfterPurchase)
     // console.log('contractBalanceAfterPurchase', contractBalanceAfterPurchase)
     // console.log('creatorContractBalance', fromUIntToEther(creatorContractBalance))
+    const transactionId = await instance.transactionCount()
+    const transactionValues = await instance.transactions(transactionId - 1)
+    const buyer = transactionValues[4]
+    assert.equal(buyer, normalUser, 'The transaction records does not match.')
     assert.equal(productPrice, contractBalanceAfterPurchase, 'The gain is not equal to the product price.')
     assert.equal(productPrice, fromUIntToEther(creatorContractBalance), 'The gain is not equal to the product price.')
   })
