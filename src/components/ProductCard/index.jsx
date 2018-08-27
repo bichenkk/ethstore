@@ -27,6 +27,8 @@ class ProductCard extends React.Component {
       6: description,
       7: imageUrl,
     } = product
+    
+    const notAvailable = (count === '0' || !enabled)
     return (
       <Card className='product-card'>
         <div>
@@ -40,24 +42,25 @@ class ProductCard extends React.Component {
               })
             }
           </div>
-          <div className='stock'>{count === 0 ? 'No Stock' : `${count} Left`}</div>
+          <div className='stock'>{count === '0' ? 'No Stock' : `${count} Left`}</div>
         </div>
         <Row className='purchase'>
           <Col span={12}>
             <div className='price-information'>
               <img src={logoEthereum} alt='ether' />
-              <div className='price'>{web3.fromWei(price, 'ether')}</div>
+              <div className='price'>{window.web3.fromWei(price, 'ether')}</div>
               <div className='unit'>ETH</div>
             </div>
           </Col>
           <Col span={12}>
             <Button
               block
+              disabled={notAvailable}
               type='primary'
               icon='shopping-cart'
               onClick={this.handlePurchaseButtonOnClick}
             >
-              Purchase
+              {notAvailable ? 'Not Available' : 'Purchase'}
             </Button>
           </Col>
         </Row>

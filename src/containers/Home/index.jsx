@@ -1,57 +1,51 @@
 import React from 'react'
-import { Row, Col } from 'antd'
+import { Row, Col, message } from 'antd'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
 import ProductCard from '../../components/ProductCard'
+import getContractMethodValue from '../../utils/getContractMethodValue'
 import './index.less'
 
 class Home extends React.Component {
   constructor(props, context) {
     super(props, context)
-    this.contracts = context.drizzle.contracts
+    this.EthStore = context.drizzle.contracts.EthStore
+    this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
+    this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
+    this.productCountDataKey = this.EthStore.methods.productCount.cacheCall()
     this.handleProductCardOnPurchase = this.handleProductCardOnPurchase.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
+    const currentProductCount = getContractMethodValue(this.props.EthStore, 'productCount', this.productCountDataKey) || 0
+    const nextProductCount = getContractMethodValue(nextProps.EthStore, 'productCount', this.productCountDataKey) || 0
+    if (currentProductCount !== nextProductCount) {
+      this.productDataKeys = (nextProductCount > 0 && _.range(nextProductCount)
+        .map((item, index) => this.EthStore.methods.products.cacheCall(index)))
+    }
   }
 
   async handleProductCardOnPurchase(product) {
-    const { EthStore } = this.contracts
     const productId = product[0]
     const productPrice = product[2]
-    const transaction = await EthStore.methods.purchaseProduct(productId).send({
-      value: productPrice,
-    })
-    console.log('transaction', transaction)
+    try {
+      await this.EthStore.methods.purchaseProduct(productId).send({
+        value: productPrice,
+        gasLimit: '100000',
+      })
+    } catch (error) {
+      message.error(error.message)
+    }
   }
 
   render() {
-    const { contracts } = this
-    const {
-      web3,
-      accounts,
-      drizzleStatus,
-      EthStore,
-    } = this.props
-    const isReady = web3.status === 'initialized' && Object.keys(accounts).length > 0 && drizzleStatus.initialized
-    if (!isReady) {
-      return (<AppLayout />)
-    }
-    const getIdentityDataKey = contracts.EthStore.methods.getIdentity.cacheCall()
-    const getIdentity = (getIdentityDataKey && _.get(EthStore, `getIdentity.${getIdentityDataKey}.value`)) || {}
-    const storeCountDataKey = contracts.EthStore.methods.storeCount.cacheCall()
-    const storeCount = (getIdentityDataKey && _.get(EthStore, `storeCount.${storeCountDataKey}.value`)) || 0
-    const productCountDataKey = contracts.EthStore.methods.productCount.cacheCall()
-    const productCount = (getIdentityDataKey && _.get(EthStore, `productCount.${productCountDataKey}.value`)) || 0
-    const products = (productCount > 0 && _.range(productCount)
-      .map((item, index) => {
-        const productDataKey = contracts.EthStore.methods.products.cacheCall(index)
-        const product = (productDataKey && _.get(EthStore, `products.${productDataKey}.value`)) || {}
-        return product
-      })
-      .filter(product => Object.keys(product).length > 0)) || []
+    const { EthStore } = this.props
+    const products = (this.productDataKeys && this.productDataKeys
+      .map(dataKey => getContractMethodValue(EthStore, 'products', dataKey))
+      .filter(product => product && Object.keys(product).length > 0 && product[4])
+    ) || []
     return (
       <AppLayout>
         <Row gutter={24}>
