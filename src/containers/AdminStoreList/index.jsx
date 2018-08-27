@@ -1,10 +1,11 @@
 import React from 'react'
-import { Row, Table, Breadcrumb } from 'antd'
+import { Row, Table, Breadcrumb, message, Button } from 'antd'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
 import BooleanStatus from '../../components/BooleanStatus'
+import ImagePreview from '../../components/ImagePreview'
 import getContractMethodValue from '../../utils/getContractMethodValue'
 
 class AdminStoreList extends React.Component {
@@ -12,6 +13,7 @@ class AdminStoreList extends React.Component {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
     this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
+    this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
     const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
     this.storeDataKeys = (currentStoreCount > 0 && _.range(currentStoreCount)
       .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
@@ -26,11 +28,21 @@ class AdminStoreList extends React.Component {
     }
   }
 
+  async handleItemButtonOnClick(storeId, enabled) {
+    try {
+      await this.EthStore.methods.enableStore(storeId, enabled).send({
+        gasLimit: '500000',
+      })
+    } catch (error) {
+      message.error(error.message)
+    }
+  }
+
   render() {
     const { EthStore } = this.props
     const stores = (this.storeDataKeys && this.storeDataKeys
       .map(dataKey => getContractMethodValue(EthStore, 'stores', dataKey))
-      .filter(store => store && Object.keys(store).length > 0 && store.enabled)
+      .filter(store => store && Object.keys(store).length > 0)
     ) || []
     const columns = [
       {
@@ -39,21 +51,36 @@ class AdminStoreList extends React.Component {
         key: 'id',
         sorter: true,
       }, {
-        title: 'Store Owner',
-        dataIndex: 'storeOwner',
-        key: 'storeOwner',
-      }, {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
       }, {
-        title: 'imageUrl',
-        dataIndex: 'imageUrl',
-        key: 'imageUrl',
+        title: 'Owner',
+        dataIndex: 'storeOwner',
+        key: 'storeOwner',
+        render: value => `${value.substring(0, 7)}...`,
       }, {
-        title: 'productCount',
+        title: 'Product Number',
         dataIndex: 'productCount',
         key: 'productCount',
+      }, {
+        title: 'Image',
+        dataIndex: 'imageUrl',
+        key: 'imageUrl',
+        render: value => <ImagePreview src={value} />,
+      }, {
+        title: 'Enabled',
+        dataIndex: 'enabled',
+        key: 'enabled',
+        render: value => <BooleanStatus value={value} />,
+      }, {
+        dataIndex: 'action',
+        key: 'action',
+        render: (value, record) => (
+          <Button onClick={() => this.handleItemButtonOnClick(record.id, !record.enabled)}>
+            {record.enabled ? 'Disable' : 'Enable' }
+          </Button>
+        ),
       },
     ]
     return (
