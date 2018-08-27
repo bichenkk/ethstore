@@ -1,5 +1,6 @@
 import React from 'react'
-import { Menu, Button, Icon } from 'antd'
+import { Menu, Button } from 'antd'
+import { withRouter } from 'react-router-dom'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -13,6 +14,7 @@ const { SubMenu } = Menu
 class Header extends React.Component {
   constructor(props, context) {
     super(props, context)
+    this.handleMenuItemOnClick = this.handleMenuItemOnClick.bind(this)
     this.handleWithdrawButtonOnClick = this.handleWithdrawButtonOnClick.bind(this)
     this.EthStore = context.drizzle.contracts.EthStore
     this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
@@ -24,6 +26,10 @@ class Header extends React.Component {
     await this.EthStore.methods.withdrawBalance().send({
       gasLimit: '500000',
     })
+  }
+
+  handleMenuItemOnClick(item) {
+    this.props.history.push(`/${item.key}`)
   }
 
   render() {
@@ -41,9 +47,9 @@ class Header extends React.Component {
           </div>
         </div>
         <div className='utility-bar'>
-          <Menu mode='horizontal' theme='dark'>
+          <Menu onClick={this.handleMenuItemOnClick} mode='horizontal' theme='dark'>
             <Menu.Item key='home'>Home</Menu.Item>
-            <Menu.Item key='stores'>Stores</Menu.Item>
+            <Menu.Item key='store_list'>Stores</Menu.Item>
             {
               getIdentity.isAdministrator &&
               <SubMenu
@@ -107,7 +113,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-})
-
-export default drizzleConnect(Header, mapStateToProps, mapDispatchToProps)
+export default withRouter(drizzleConnect(Header, mapStateToProps))

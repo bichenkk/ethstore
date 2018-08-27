@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, message } from 'antd'
+import { Row, Col, message, Breadcrumb } from 'antd'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -17,6 +17,12 @@ class Home extends React.Component {
     this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
     this.productCountDataKey = this.EthStore.methods.productCount.cacheCall()
     this.handleProductCardOnPurchase = this.handleProductCardOnPurchase.bind(this)
+    const currentProductCount = getContractMethodValue(this.props.EthStore, 'productCount', this.productCountDataKey) || 0
+    this.productDataKeys = (currentProductCount > 0 && _.range(currentProductCount)
+      .map((item, index) => this.EthStore.methods.products.cacheCall(index)))
+    const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
+    this.storeDataKeys = (currentStoreCount > 0 && _.range(currentStoreCount)
+      .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
   }
 
   componentWillReceiveProps(nextProps) {
@@ -70,14 +76,20 @@ class Home extends React.Component {
     })
     return (
       <AppLayout>
-        <IntroductionCard />
-        <Row gutter={24} style={{ marginTop: '24px' }}>
-          {productsWithStore.map(product => (
-            <Col style={{ marginBottom: '24px' }} span={8} key={`col-productcard-${product[0]}`}>
-              <ProductCard product={product} onPurchase={this.handleProductCardOnPurchase} />
-            </Col>
-          ))}
-        </Row>
+        <div>
+          <IntroductionCard />
+          <Breadcrumb separator='>'>
+            <Breadcrumb.Item>EthStore</Breadcrumb.Item>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+          </Breadcrumb>
+          <Row gutter={24} style={{ marginTop: '24px' }}>
+            {productsWithStore.map(product => (
+              <Col style={{ marginBottom: '24px' }} span={8} key={`col-productcard-${product[0]}`}>
+                <ProductCard product={product} onPurchase={this.handleProductCardOnPurchase} />
+              </Col>
+            ))}
+          </Row>
+        </div>
       </AppLayout>
     )
   }

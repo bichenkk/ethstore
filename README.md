@@ -64,7 +64,7 @@ Follow the steps:
     * compile and migrate contracts on local development network (port:8545)
     * start webpack and open EthStore React.js app on http://localhost:3000
 
-4. Open MetaMask on Chrome. Choose network Localhost 8545 and import account with private key generated from ganache.
+4. Open MetaMask on Chrome. Choose network Localhost 8545 and import account with private key generated from Ganache.
 > Do Not Choose MetaMask Beta
 <img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/metamask-instruction.png">
 
@@ -95,7 +95,7 @@ The tests basically checks if
 
 ## Library used
 
-Etherum Contract
+Ethereum Contract
 * Truffle
 * OpenZeppelin, Ownable contract and SafeMath library
 

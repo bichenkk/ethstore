@@ -1,5 +1,5 @@
 import { drizzleConnect } from 'drizzle-react'
-import React, { Children, Component } from 'react'
+import React, { Component } from 'react'
 import { Avatar } from 'antd'
 import { createIcon } from '@download/blockies'
 import _ from 'lodash'

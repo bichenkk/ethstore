@@ -1,0 +1,82 @@
+.store-card {
+  display: flex;
+  .ant-card-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    img {
+      flex-shrink: 0;
+      border: 1px solid #ebedf0;
+      border-radius: 50px;
+      overflow: hidden;
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      margin-right: 24px;
+    }
+    .information {
+      flex-grow: 0;
+      flex-shrink: 1;
+      overflow: hidden;
+      .title {
+        color: black;
+        font-size: 20px;
+        margin-bottom: 6px;
+      }
+      .merchant {
+        font-size: 12px;
+        margin-bottom: 6px;
+        img {
+          margin: 0 6px;
+          width: 24px;
+          height: 24px;
+        }
+      }
+      .description {
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
+      .stock {
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+    }
+    .panel {
+      flex-grow: 1;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column-reverse;
+      .purchase {
+        border: 1px solid black;
+        border-radius: 4px;
+        overflow: hidden;
+        align-items: center;
+        height: 34px;
+        .price-information {
+          display: flex;
+          flex-direction: row;
+          align-items: baseline;
+          justify-content: center;
+          line-height: 28px;
+          img {
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
+          }
+          .price {
+            font-size: 16px;
+            margin-right: 6px;
+          }
+          .unit {
+            font-size: 12px;
+          } 
+        }
+        .ant-btn {
+          border-color: transparent;
+          border-radius: 0;
+        }
+      } 
+    }
+  }
+}

@@ -1,29 +1,17 @@
 import React from 'react'
-import { Card } from 'antd'
-import AppFooter from '../../components/AppFooter'
-import logo from '../../assets/logo-mobidoc.png'
-import backgroundImage from '../../assets/background.jpg'
+import { Card, Icon, Button } from 'antd'
+import logoEthStore from '../../assets/logo-ethstore-horizontal.png'
 import './index.less'
 
 class NotFound extends React.Component {
   render() {
     return (
-      <div
-        className='not-found-page'
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-        }}
-      >
-        <Card className='container'>
-          <div className='header'>
-            <img src={logo} height='100px' alt='React Starter' />
-            <h1>404 Not Found</h1>
-            <p>Sorry, that page doesn&apos;t exist!</p>
-          </div>
-          <AppFooter />
+      <div className='notfound-container'>
+        <img src={logoEthStore} alt='EthStore' />
+        <Card hoverable className='notfound-card'>
+          <Icon style={{ fontSize: '28px', marginBottom: '24px' }} type='warning' />
+          <h1>This page doesn&apos;t exist.</h1>
+          <p>Please go back to EthStore</p>
         </Card>
       </div>
     )

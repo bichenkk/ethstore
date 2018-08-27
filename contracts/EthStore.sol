@@ -56,7 +56,7 @@ contract EthStore is Ownable {
   constructor() public {
     // create and edit sample store coldWalletStore
     createStore(msg.sender);
-    editStore("Cold Wallet Store", "We sell cold wallets!", "https://binatir.com/assets/customised/avatar-kk.jpg");
+    editStore("Cold Wallet Store", "We sell cold wallets!", "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/store-0.png");
     // add products to coldWalletStore
     addProduct(
       "Ledger Nano S",
@@ -102,7 +102,7 @@ contract EthStore is Ownable {
     Store storage eventTicketStore = stores[1];
     eventTicketStore.name = "Event Ticket Store";
     eventTicketStore.description = "We sell event tickets!";
-    eventTicketStore.imageUrl = "https://binatir.com/assets/customised/avatar-kk.jpg";
+    eventTicketStore.imageUrl = "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/store-1.jpg";
     // add products to eventTicketStore
     uint256 product1Id = productCount.add(1);
     storeIdToProductIds[eventTicketStore.id].push(product1Id);
