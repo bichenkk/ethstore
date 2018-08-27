@@ -68,7 +68,9 @@ Follow the steps:
 > Do Not Choose MetaMask Beta
 <img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/metamask-instruction.png">
 
-5. You should be able to see the EthStore dapp. Have fun!
+5. You should be able to see the EthStore dapp. You can make purchases and switch accounts to try different roles. Have fun! 
+
+<img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/screenshot.png">
 
 ## Test for EthStore contract
 
