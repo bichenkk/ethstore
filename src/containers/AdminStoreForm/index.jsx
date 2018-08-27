@@ -1,66 +1,69 @@
 import React from 'react'
-import { Row, Col, Breadcrumb } from 'antd'
+import { Row, Card, Breadcrumb, message } from 'antd'
+import { withRouter } from 'react-router-dom'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
-import StoreCard from '../../components/StoreCard'
-import getContractMethodValue from '../../utils/getContractMethodValue'
+import { editForm } from '../../actions/adminStoreForm'
+import Form from './Form'
 
-class AdminStoreList extends React.Component {
+class AdminStoreForm extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
-    this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
-    const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
-    this.storeDataKeys = (currentStoreCount > 0 && _.range(currentStoreCount)
-      .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
+    this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
-    const nextStoreCount = getContractMethodValue(nextProps.EthStore, 'storeCount', this.storeCountDataKey) || 0
-    if (currentStoreCount !== nextStoreCount) {
-      this.storeDataKeys = (nextStoreCount > 0 && _.range(nextStoreCount)
-        .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
+  async handleFormOnSubmit(values) {
+    try {
+      await this.EthStore.methods.createStore(values.address).send({
+        gasLimit: '500000',
+      })
+      this.props.history.push(`/admin_store_list`)
+    } catch (error) {
+      message.error(error.message)
     }
   }
 
   render() {
-    const { EthStore } = this.props
-    const stores = (this.storeDataKeys && this.storeDataKeys
-      .map(dataKey => getContractMethodValue(EthStore, 'stores', dataKey))
-      .filter(store => store && Object.keys(store).length > 0 && store.enabled)
-    ) || []
     return (
       <AppLayout>
         <Breadcrumb separator='>'>
           <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
-          <Breadcrumb.Item>Stores</Breadcrumb.Item>
+          <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
+          <Breadcrumb.Item>Create Store</Breadcrumb.Item>
         </Breadcrumb>
         <Row gutter={24} style={{ marginTop: '24px' }}>
-          {stores.map(store => (
-            <Col style={{ marginBottom: '24px' }} span={24} key={`col-storecard-${store[0]}`}>
-              <StoreCard store={store} />
-            </Col>
-          ))}
+          <Card title='Create New Store'>
+            <Form
+              onSubmit={this.handleFormOnSubmit}
+              onFieldsChange={this.props.editForm}
+              formFieldValues={this.props.formFieldValues}
+              isEditItemLoading={this.props.isEditItemLoading}
+            />
+          </Card>
         </Row>
       </AppLayout>
     )
   }
 }
 
-AdminStoreList.contextTypes = {
+AdminStoreForm.contextTypes = {
   drizzle: PropTypes.object,
 }
 
-const mapStateToProps = state => (
-  {
-    accounts: state.accounts,
-    EthStore: state.contracts.EthStore,
+const mapStateToProps = (state) => {
+  const {
+    formFieldValues,
+  } = state.adminStoreForm
+  return {
+    formFieldValues,
   }
-)
+}
 
-const mapDispatchToProps = () => ({})
+const mapDispatchToProps = dispatch => ({
+  editForm: formFieldsChange => dispatch(editForm(formFieldsChange)),
+})
 
-export default drizzleConnect(AdminStoreList, mapStateToProps, mapDispatchToProps)
+export default withRouter(drizzleConnect(AdminStoreForm, mapStateToProps, mapDispatchToProps))

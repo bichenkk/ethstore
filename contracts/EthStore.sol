@@ -135,6 +135,7 @@ contract EthStore is Ownable {
     * @param _storeOwner The address of the store owner.
     */
   function createStore(address _storeOwner) public onlyOwner {
+    require(storeOwnerToStoreId[_storeOwner] == 0);
     // create a store for the store owner
     uint256 storeId = storeCount.add(1);
     storeCount = stores.push(Store(storeId, _storeOwner, true, "", "", "", 0));

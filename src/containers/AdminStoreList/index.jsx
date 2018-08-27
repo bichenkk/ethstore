@@ -54,6 +54,7 @@ class AdminStoreList extends React.Component {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
+        render: value => value || 'NA',
       }, {
         title: 'Owner',
         dataIndex: 'storeOwner',
@@ -88,7 +89,7 @@ class AdminStoreList extends React.Component {
         <Breadcrumb separator='>'>
           <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
           <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
-          <Breadcrumb.Item>Manage Products</Breadcrumb.Item>
+          <Breadcrumb.Item>Manage Stores</Breadcrumb.Item>
         </Breadcrumb>
         <Row gutter={24} style={{ marginTop: '24px' }}>
           <Table

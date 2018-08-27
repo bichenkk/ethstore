@@ -105,8 +105,7 @@ class Home extends React.Component {
         dataIndex: 'imageUrl',
         key: 'imageUrl',
         render: value => <ImagePreview src={value} />,
-      },
-      {
+      }, {
         dataIndex: 'action',
         key: 'action',
         render: (value, record) => (
