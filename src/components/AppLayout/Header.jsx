@@ -17,27 +17,35 @@ class Header extends React.Component {
   componentWillReceiveProps(nextProps) {
   }
 
-  handleWithdrawButtonOnClick() {
+  async handleWithdrawButtonOnClick() {
+    const { EthStore } = this.contracts
+    const transaction = await EthStore.methods.withdrawBalance().send()
+    console.log('transaction', transaction)
   }
 
   render() {
     const { web3, accounts, drizzleStatus } = this.props
+    // let addressBalance = null
     let contractBalance = null
     if (web3.status === 'failed') {
+      // addressBalance = <Icon type='loading' />
       contractBalance = <Icon type='loading' />
     } else if (web3.status === 'initialized' && Object.keys(accounts).length === 0) {
+      // addressBalance = <Icon type='loading' />
       contractBalance = <Icon type='loading' />
     } else if (!drizzleStatus.initialized) {
       contractBalance = <Icon type='loading' />
+      // addressBalance = <Icon type='loading' />
     } else {
       const getIdentityDataKey = this.contracts.EthStore.methods.getIdentity.cacheCall()
       const getIdentity = (getIdentityDataKey && _.get(this.props.EthStore, `getIdentity.${getIdentityDataKey}.value`)) || {}
       const addressToBalanceDataKey = this.contracts.EthStore.methods.addressToBalance.cacheCall(accounts[0])
-      const addressToBalance = (addressToBalanceDataKey && _.get(this.props.EthStore, `addressToBalance.${addressToBalanceDataKey}.value`))
+      const addressToBalance = (addressToBalanceDataKey && _.get(this.props.EthStore, `addressToBalance.${addressToBalanceDataKey}.value`)) || 0
+      // addressBalance = (accounts[0] && window.web3.eth.getBalance(accounts[0])) || 'NA'
       contractBalance = (
         <div>
-          {`${addressToBalance} ETH`}
-          <Button>Withdraw</Button>
+          {`${window.web3.fromWei(addressToBalance, 'ether')} ETH`}
+          <Button onClick={this.handleWithdrawButtonOnClick}>Withdraw</Button>
         </div>
       )
     }
@@ -55,12 +63,18 @@ class Header extends React.Component {
           <Menu mode='horizontal' theme='dark'>
             <Menu.Item key='home'>Home</Menu.Item>
           </Menu>
-          <div className='balance'>
-            <div>
-              Your Contract Balance:
+          <div className='balance-bar'>
+            {/* <div className='balance'>
+              <div>Your Address Balance:</div>
+              <div>
+                <div className='balance-value'>{addressBalance}</div>
               </div>
-            <div>
-              <div className='balance-value'>{contractBalance}</div>
+            </div> */}
+            <div className='balance'>
+              <div>Your Contract Balance:</div>
+              <div>
+                <div className='balance-value'>{contractBalance}</div>
+              </div>
             </div>
           </div>
         </div>

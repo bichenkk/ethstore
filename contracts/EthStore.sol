@@ -16,6 +16,7 @@ contract EthStore is Ownable {
     address storeOwner;
     bool enabled;
     string name;
+    string description;
     string imageUrl;
     uint256 productCount;
   }
@@ -27,6 +28,7 @@ contract EthStore is Ownable {
     uint256 count;
     bool enabled;
     string name;
+    string description;
     string imageUrl;
   }
 
@@ -40,9 +42,32 @@ contract EthStore is Ownable {
 
   constructor() public {
     createStore(msg.sender);
-    editStore("First EthStore", "https://binatir.com/assets/customised/avatar-kk.jpg");
-    addProduct("EthStore Item 1", "https://binatir.com/assets/customised/avatar-kk.jpg", 5 ether, 1);
-    addProduct("EthStore Item 2", "https://binatir.com/assets/customised/avatar-kk.jpg", 5 ether, 2);
+    editStore("Cold Wallet Store", "We sell cold wallets!", "https://binatir.com/assets/customised/avatar-kk.jpg");
+    addProduct(
+      "Ledger Nano S",
+      "Protect your crypto assets with the most popular multicurrency hardware wallet in the market. The Ledger Nano S is built around a secure chip, ensuring optimal security.",
+      "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/wallet-ledger-nano.png",
+      2 ether,
+      100);
+    addProduct(
+      "Ledger Blue",
+      "Ledger Blue is a premium hardware wallet with an advanced user experience thanks to a large touchscreen interface. It is built around a Secure Element and includes all the security features you’d expect from a Ledger device.",
+      "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/wallet-ledger-blue.png",
+      5 ether,
+      0);
+    addProduct(
+      "Trezor One White",
+      "The most trusted hardware wallet in the world. Get yours today!",
+      "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/wallet-trezor-one.jpg",
+      1 ether,
+      20);
+    addProduct(
+      "Trezor Model T",
+      "The Trezor Model T is the next-generation cryptocurrency hardware wallet, designed to be your universal vault for all of your digital assets. Store and encrypt your coins, passwords and other digital keys with confidence.",
+      "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/wallet-trezor-model-t.jpg",
+      3 ether,
+      10);
+    enableProduct(productCount.sub(1), false);
   }
 
   modifier onlyStoreOwner() {
@@ -60,14 +85,15 @@ contract EthStore is Ownable {
   function createStore(address _storeOwner) public onlyOwner {
     // create a store for the store owner
     storeOwnerToStoreId[_storeOwner] = storeCount;
-    storeCount = stores.push(Store(storeCount, _storeOwner, true, "", "", 0));
+    storeCount = stores.push(Store(storeCount, _storeOwner, true, "", "", "", 0));
     Store storage store = stores[storeCount.sub(1)];
     emit NewStore(store.id, store.storeOwner, store.enabled, store.name, store.imageUrl, store.productCount);
   }
 
-  function editStore(string _name, string _imageUrl) public onlyStoreOwner {
+  function editStore(string _name, string _description, string _imageUrl) public onlyStoreOwner {
     Store storage store = stores[storeOwnerToStoreId[msg.sender]];
     store.name = _name;
+    store.description = _description;
     store.imageUrl = _imageUrl;
   }
 
@@ -76,20 +102,21 @@ contract EthStore is Ownable {
     store.enabled = _enabled;
   }
 
-  function addProduct(string _name, string _imageUrl, uint256 _price, uint256 _count) public onlyStoreOwner {
+  function addProduct(string _name, string _description, string _imageUrl, uint256 _price, uint256 _count) public onlyStoreOwner {
     Store storage store = stores[storeOwnerToStoreId[msg.sender]];
     storeIdToProductIds[store.id].push(productCount);
-    productCount = products.push(Product(productCount, store.id, _price, _count, true, _name, _imageUrl));
+    productCount = products.push(Product(productCount, store.id, _price, _count, true, _name, _description, _imageUrl));
     store.productCount = store.productCount.add(1);
     Product storage product = products[productCount.sub(1)];
     emit NewProduct(product.id, product.storeId, product.price, product.count, product.enabled, product.name, product.imageUrl);
   }
 
-  function editProduct(uint256 _productId, string _name, string _imageUrl, uint256 _price, uint256 _count) public onlyStoreOwner {
+  function editProduct(uint256 _productId, string _name, string _description, string _imageUrl, uint256 _price, uint256 _count) public onlyStoreOwner {
     Store storage store = stores[storeOwnerToStoreId[msg.sender]];
     Product storage product = products[_productId];
     require(product.storeId == store.id);
     product.name = _name;
+    product.description = _description;
     product.imageUrl = _imageUrl;
     product.price = _price;
     product.count = _count;

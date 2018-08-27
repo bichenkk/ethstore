@@ -15,7 +15,8 @@
     "start": "NODE_ENV=development API_URL=http://localhost:3030 webpack-dev-server --config webpack.config.dev.js --colors",
     "test": "echo \"Error: no test specified\" && exit 1",
     "contract:reset": "rm -rf build && truffle compile && truffle migrate",
-    "contract:test": "truffle test"
+    "contract:test": "truffle test",
+    "kickstart": "npm run contract:reset && npm run start"
   },
   "dependencies": {
     "@download/blockies": "^1.0.3",

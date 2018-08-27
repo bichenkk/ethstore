@@ -4,6 +4,7 @@ import { Avatar } from 'antd'
 import { createIcon } from '@download/blockies'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
+import logoEthereum from '../../assets/logo-ethereum-dark.jpg'
 import logoMetaMask from '../../assets/logo-metamask.png'
 import './index.less'
 
@@ -24,7 +25,7 @@ class UserProfile extends Component {
     if (web3.status === 'failed') {
       title = 'No connection'
       subtitle = 'Please connect to Localhost 8545'
-      avatarProps.src = logoMetaMask
+      avatarProps.src = logoEthereum
     } else if (web3.status === 'initialized' && Object.keys(accounts).length === 0) {
       title = 'No accounts available'
       subtitle = 'Please check your MetaMask'

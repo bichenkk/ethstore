@@ -49,23 +49,23 @@ contract('EthStore', (accounts) => {
     const storeId = await instance.storeOwnerToStoreId(storeOwner)
     const oldStoreValues = await instance.stores(storeId)
     const oldStoreName = oldStoreValues[3]
-    const oldStoreImageUrl = oldStoreValues[4]
+    const oldStoreDescription = oldStoreValues[5]
     const newName = crypto.randomBytes(20).toString('hex')
     const newUrl = crypto.randomBytes(20).toString('hex')
-    await instance.editStore(newName, newUrl, { from: storeOwner })
+    await instance.editStore(newName, "", newUrl, { from: storeOwner })
     const newStoreValues = await instance.stores(storeId)
     const newStoreName = newStoreValues[3]
-    const newStoreImageUrl = newStoreValues[4]
+    const newStoreDescription = newStoreValues[5]
     // console.log('oldStoreName', oldStoreName)
-    // console.log('oldStoreImageUrl', oldStoreImageUrl)
+    // console.log('oldStoreDescription', oldStoreDescription)
     // console.log('newName', newName)
     // console.log('newUrl', newUrl)
     // console.log('newStoreName', newStoreName)
-    // console.log('newStoreImageUrl', newStoreImageUrl)
+    // console.log('newStoreDescription', newStoreDescription)
     assert.notEqual(newStoreName, oldStoreName, 'The store name is not changed.')
-    assert.notEqual(newStoreImageUrl, oldStoreImageUrl, 'The store image url is not changed.')
+    assert.notEqual(newStoreDescription, oldStoreDescription, 'The store image url is not changed.')
     assert.equal(newStoreName, newName, 'The store name is not changed.')
-    assert.equal(newStoreImageUrl, newUrl, 'The store image url is not changed.')
+    assert.equal(newStoreDescription, newUrl, 'The store image url is not changed.')
   })
 
   it('should fail if a normal user tries to edit his/her store', async () => {
@@ -147,7 +147,7 @@ contract('EthStore', (accounts) => {
     const instance = await EthStore.new()
     await instance.createStore(storeOwner)
     const storeId = await instance.storeOwnerToStoreId(storeOwner)
-    await instance.addProduct("My Product 1", "", web3.toWei(10), 15, { from: storeOwner })
+    await instance.addProduct("My Product 1", "", "", web3.toWei(10), 15, { from: storeOwner })
     const store = await instance.stores(storeId)
     const storeProductCount = store.productCount
     const productId = await instance.storeIdToProductIds(storeId, storeProductCount - 1)
@@ -156,7 +156,7 @@ contract('EthStore', (accounts) => {
     const oldProductCount = oldProductValues[3]
     const newPrice = web3.toWei(15)
     const newCount = 20
-    await instance.editProduct(productId, "", "", newPrice, newCount, { from: storeOwner })
+    await instance.editProduct(productId, "", "", "", newPrice, newCount, { from: storeOwner })
     const newProductValues = await instance.products(productId)
     const newProductPrice = newProductValues[2]
     const newProductCount = newProductValues[3]
@@ -173,7 +173,7 @@ contract('EthStore', (accounts) => {
   it('should be able to disable a product by creator', async () => {
     const instance = await EthStore.new()
     const storeId = await instance.storeOwnerToStoreId(storeOwner)
-    await instance.addProduct("My Product 1", "", web3.toWei(10), 15, { from: storeOwner })
+    await instance.addProduct("My Product 1", "", "", web3.toWei(10), 15, { from: storeOwner })
     const store = await instance.stores(storeId)
     const storeProductCount = store.productCount
     const productId = await instance.storeIdToProductIds(storeId, storeProductCount - 1)

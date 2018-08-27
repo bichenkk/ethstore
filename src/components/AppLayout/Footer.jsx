@@ -26,7 +26,7 @@ class Footer extends React.Component {
         <Row className='terms-bar'>
           <Col span={8} className='left-part'>
             <ul>
-              <li><a href=''>Project Github</a></li>
+              <li><a href='https://github.com/bichenkk/ethstore'>Project Github</a></li>
             </ul>
           </Col>
           <Col span={8} className='center-part'>
