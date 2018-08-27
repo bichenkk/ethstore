@@ -66,7 +66,7 @@ class Header extends React.Component {
           </Menu>
           <div className='balance-bar'>
             <div className='balance'>
-              <div>Your Contract Balance:</div>
+              <div>Your Balance at EthStore:</div>
               <div>
                 <div className='balance-value'>
                   <div>

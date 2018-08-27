@@ -1,6 +1,8 @@
-# EthStore - Dapp on Ethereum
+<img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/logo.png">
  
-This demo shows the integration of Truffle + Drizzle + React + Redux with the contract Simple Storage. It shows how to read and write into smart contracts from a react dapp.
+> Final Project for 2018 Developer Program by ConsenSys Academy
+
+This is the final project of Online Marketplace on Ethereum network by KK Chen, kk@bichenkk.com.
 
 ## Installation
 
