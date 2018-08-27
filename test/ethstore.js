@@ -121,23 +121,23 @@ contract('EthStore', (accounts) => {
   it('should be able to let store owner withdraw the balances', async () => {
     const instance = await EthStore.new()
     const storeId = await instance.storeOwnerToStoreId(creator)
-    const creatorBalanceBeforePurchase = await getEtherBalance(creator)
+    const creatorBalanceBeforePurchase = await web3.eth.getBalance(creator)
     const productValues = await instance.products(0)
-    const productPrice = fromUIntToEther(productValues[2])
+    const productPrice = productValues[2]
     const productId = productValues[0]
     await instance.purchaseProduct(productId, { value: web3.toWei(10), from: normalUser })
-    const contractBalanceAfterPurchase = await getEtherBalance(instance.address)
+    const contractBalanceAfterPurchase = await web3.eth.getBalance(instance.address)
     const creatorContractBalanceAfterPurchase = await instance.addressToBalance(creator)
-    const creatorBalanceAfterPurchase = await getEtherBalance(creator)
+    const creatorBalanceAfterPurchase = await web3.eth.getBalance(creator)
     const withdrawBalanceTransaction = await instance.withdrawBalance()
     const withdrawBalanceTx = await web3.eth.getTransaction(withdrawBalanceTransaction.tx);
     const withdrawBalanceTransactionGasPrice = withdrawBalanceTx.gasPrice;
     const withdrawBalanceTransactionGasUsed = withdrawBalanceTransaction.receipt.gasUsed
-    const withdrawBalanceTransactionEtherUsed = web3.fromWei(withdrawBalanceTransactionGasPrice * withdrawBalanceTransactionGasUsed, 'ether' )
-    const contractBalanceAfterWithdrawal = await getEtherBalance(instance.address)
+    const withdrawBalanceTransactionEtherUsed = withdrawBalanceTransactionGasPrice.times(withdrawBalanceTransactionGasUsed)
+    const contractBalanceAfterWithdrawal = await web3.eth.getBalance(instance.address)
     const creatorContractBalanceAfterWithdrawal = await instance.addressToBalance(creator)
-    const creatorBalanceAfterWithdrawal = await getEtherBalance(creator)
-    const difference = (+creatorBalanceAfterWithdrawal) + (+withdrawBalanceTransactionEtherUsed) - (+creatorBalanceBeforePurchase)
+    const creatorBalanceAfterWithdrawal = await web3.eth.getBalance(creator)
+    const difference = creatorBalanceAfterWithdrawal.plus(withdrawBalanceTransactionEtherUsed).minus(creatorBalanceBeforePurchase)
     // console.log('creatorBalanceBeforePurchase', creatorBalanceBeforePurchase)
     // console.log('product price', productPrice)
     // console.log('contractBalanceAfterPurchase', contractBalanceAfterPurchase)
@@ -148,7 +148,7 @@ contract('EthStore', (accounts) => {
     // console.log('creatorContractBalanceAfterWithdrawal', fromUIntToEther(creatorContractBalanceAfterWithdrawal))
     // console.log('creatorBalanceAfterWithdrawal', creatorBalanceAfterWithdrawal)
     // console.log('difference', difference)
-    assert.equal(difference, productPrice, 'The withdrawal is not equal to the product price.')
+    assert.isOk(new BigNumber(difference).isEqualTo(new BigNumber(productPrice)), 'The withdrawal is not equal to the product price.')
   })
 
   it('should be able to edit product by the store owner', async () => {

@@ -43,17 +43,20 @@ contract EthStore is Ownable {
   mapping(address => uint256) public addressToBalance;
   mapping (address => uint256) public storeOwnerToStoreId;
   mapping (uint256 => uint256[]) public storeIdToProductIds;
-  uint256 public storeCount = 0;
-  uint256 public productCount = 0;
-  uint256 public transactionCount = 0;
   Store[] public stores;
   Product[] public products;
   Transaction[] public transactions;
+  uint256 public storeCount = 0;
+  uint256 public productCount = 0;
+  uint256 public transactionCount = 0;
 
+  /** @dev Constructor of EthStore. Will create sample stores and products.
+    */
   constructor() public {
-    // create sample store coldWalletStore
+    // create and edit sample store coldWalletStore
     createStore(msg.sender);
     editStore("Cold Wallet Store", "We sell cold wallets!", "https://binatir.com/assets/customised/avatar-kk.jpg");
+    // add products to coldWalletStore
     addProduct(
       "Ledger Nano S",
       "Protect your crypto assets with the most popular multicurrency hardware wallet in the market. The Ledger Nano S is built around a secure chip, ensuring optimal security.",
@@ -93,41 +96,56 @@ contract EthStore is Ownable {
     // disable last product Trezor Model T + Cryptosteel for testing
     enableProduct(productCount, false);
 
-    // create sample store eventTicketStore
+    // create and edit sample store eventTicketStore
     createStore(address(0));
     Store storage eventTicketStore = stores[1];
     eventTicketStore.name = "Event Ticket Store";
     eventTicketStore.description = "We sell event tickets!";
     eventTicketStore.imageUrl = "https://binatir.com/assets/customised/avatar-kk.jpg";
-    uint256 product1Id = productCount + 1;
+    // add products to eventTicketStore
+    uint256 product1Id = productCount.add(1);
     storeIdToProductIds[eventTicketStore.id].push(product1Id);
     productCount = products.push(Product(product1Id, eventTicketStore.id, 10 ether, 0, true, "EDCON Paris 17-18 Feb", "Ethereum event", "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/event-edcon.png"));
     eventTicketStore.productCount = eventTicketStore.productCount.add(1);
-    uint256 product2Id = productCount + 1;
+    uint256 product2Id = productCount.add(1);
     storeIdToProductIds[eventTicketStore.id].push(product2Id);
     productCount = products.push(Product(product2Id, eventTicketStore.id, 5 ether, 5, true, "ETHIS Hong Kong 8 September", "Ethereum event", "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/event-ethis.png"));
     eventTicketStore.productCount = eventTicketStore.productCount.add(1);
   }
 
+  /** @dev Check if the address has an enabled store.
+    */
   modifier onlyStoreOwner() {
     uint256 storeId = storeOwnerToStoreId[msg.sender];
     require(storeId > 0 && storeId <= storeCount && stores[storeId.sub(1)].enabled);
     _;
   }
 
+  /** @dev Get identity of msg.sender.
+    * @return isAdministrator The flag indicates if msg.sender is the administrator.
+    * @return isStoreOwner The flag indicates if msg.sender is a store owner.
+    */
   function getIdentity() view public returns (bool isAdministrator, bool isStoreOwner) {
     uint256 storeId = storeOwnerToStoreId[msg.sender];
     return (msg.sender == owner, storeId > 0 && storeId <= storeCount && stores[storeId.sub(1)].enabled);
   }
 
+  /** @dev Create a new store.
+    * @param _storeOwner The address of the store owner.
+    */
   function createStore(address _storeOwner) public onlyOwner {
     // create a store for the store owner
-    uint256 storeId = storeCount + 1;
+    uint256 storeId = storeCount.add(1);
     storeCount = stores.push(Store(storeId, _storeOwner, true, "", "", "", 0));
     storeOwnerToStoreId[_storeOwner] = storeId;
     emit NewStore(storeId, _storeOwner);
   }
 
+  /** @dev Edit a store.
+    * @param _name The name of the store.
+    * @param _description The description of the store.
+    * @param _imageUrl The image url of the store.
+    */
   function editStore(string _name, string _description, string _imageUrl) public onlyStoreOwner {
     Store storage store = stores[storeOwnerToStoreId[msg.sender].sub(1)];
     store.name = _name;
@@ -135,22 +153,41 @@ contract EthStore is Ownable {
     store.imageUrl = _imageUrl;
   }
 
+  /** @dev Enable / disable a store.
+    * @param _storeId The id of the store.
+    * @param _enabled The flag of enabled.
+    */
   function enableStore(uint256 _storeId, bool _enabled) public onlyOwner {
     require(_storeId > 0 && _storeId <= storeCount);
     Store storage store = stores[_storeId.sub(1)];
     store.enabled = _enabled;
   }
 
+  /** @dev Add a product to the store of msg.sender.
+    * @param _name The name of the product.
+    * @param _description The description of the product.
+    * @param _imageUrl The image url of the product.
+    * @param _price The price of the product.
+    * @param _count The number of inventory.
+    */
   function addProduct(string _name, string _description, string _imageUrl, uint256 _price, uint256 _count) public onlyStoreOwner {
     uint256 storeId = storeOwnerToStoreId[msg.sender];
     Store storage store = stores[storeId.sub(1)];
-    uint256 productId = productCount + 1;
+    uint256 productId = productCount.add(1);
     storeIdToProductIds[store.id].push(productId);
     productCount = products.push(Product(productId, store.id, _price, _count, true, _name, _description, _imageUrl));
     store.productCount = store.productCount.add(1);
     emit NewProduct(productId, store.id);
   }
 
+  /** @dev Edit a product.
+    * @param _productId The id of the product.
+    * @param _name The name of the product.
+    * @param _description The description of the product.
+    * @param _imageUrl The image url of the product.
+    * @param _price The price of the product.
+    * @param _count The number of inventory.
+    */
   function editProduct(uint256 _productId, string _name, string _description, string _imageUrl, uint256 _price, uint256 _count) public onlyStoreOwner {
     require(_productId > 0 && _productId <= productCount);
     uint256 storeId = storeOwnerToStoreId[msg.sender];
@@ -164,12 +201,19 @@ contract EthStore is Ownable {
     product.count = _count;
   }
 
+  /** @dev Enable / disable a product.
+    * @param _productId The id of the product.
+    * @param _enabled The flag of enabled.
+    */
   function enableProduct(uint256 _productId, bool _enabled) public onlyOwner {
     require(_productId > 0 && _productId <= productCount);
     Product storage product = products[_productId.sub(1)];
     product.enabled = _enabled;
   }
 
+  /** @dev Purchase a product
+    * @param _productId The id of the product.
+    */
   function purchaseProduct(uint256 _productId) public payable {
     require(_productId > 0 && _productId <= productCount);
     Product storage product = products[_productId.sub(1)];
@@ -186,6 +230,8 @@ contract EthStore is Ownable {
     }
   }
 
+  /** @dev Withdraw the contract balance of the address
+    */
   function withdrawBalance() public {
     uint256 amount = addressToBalance[msg.sender];
     addressToBalance[msg.sender] = 0;

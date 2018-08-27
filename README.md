@@ -56,12 +56,32 @@ Make sure you have installed
     npm run kickstart
     ```
 
-The npm script `kickstart` will do the followings
-* install npm packages
-* remove truffle build files
-* compile and migrate contracts on local development network (port:8545)
-* start EthStore on http://localhost:3000
+    The npm script `kickstart` will do the followings
+    * install npm packages
+    * remove truffle build files
+    * compile and migrate contracts on local development network (port:8545)
+    * start webpack and open EthStore React.js app on http://localhost:3000
 
 4. Open MetaMask on Chrome. Choose network Localhost 8545 and import account with private key generated from ganache.
 
 5. You should be able to see the EthStore dapp. Have fun!
+
+## Test for EthStore contract
+
+You can start running test with truffle. It tries to cover most core functions in the EthStore contract.
+
+    ```javascript
+    // Inside ethstore
+    // Start running test on local Ganache with port 8545
+    truffle test
+    ```
+The tests basically checks if
+* the creator of the contract has the administrator right
+* only administrator can create stores for addresses
+* only store owners can edit their own stores
+* administrator can disable stores
+* users can make a purchase
+* users can withdraw payment if they have balances
+* store owners can edit their product
+* administrator can disable products
+* users have the correct identities
