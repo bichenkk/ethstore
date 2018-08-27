@@ -57,7 +57,7 @@ class ProductCard extends React.Component {
               block
               disabled={notAvailable}
               type='primary'
-              icon='shopping-cart'
+              icon={notAvailable ? null : 'shopping-cart'}
               onClick={this.handlePurchaseButtonOnClick}
             >
               {notAvailable ? 'Not Available' : 'Purchase'}
