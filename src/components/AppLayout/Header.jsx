@@ -43,6 +43,7 @@ class Header extends React.Component {
         <div className='utility-bar'>
           <Menu mode='horizontal' theme='dark'>
             <Menu.Item key='home'>Home</Menu.Item>
+            <Menu.Item key='stores'>Stores</Menu.Item>
             {
               getIdentity.isAdministrator &&
               <SubMenu

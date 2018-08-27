@@ -1,55 +1,72 @@
 .product-card {
-  height: 450px;
+  display: flex;
+  height: 500px;
   .ant-card-body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    img {
-      width: 100%;
-      height: 200px;
-      object-fit: contain;
-      margin-bottom: 24px;
-    }
-    .title {
-      color: black;
-      font-size: 20px;
-      margin-bottom: 6px;
-    }
-    .description {
-      margin-bottom: 12px;
-    }
-    .stock {
-      font-size: 12px;
-      margin-bottom: 12px;
-    }
-    .purchase {
-      border: 1px solid black;
-      border-radius: 4px;
+    .information {
+      flex-grow: 0;
+      flex-shrink: 1;
       overflow: hidden;
-      align-items: center;
-      height: 34px;
-      .price-information {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-        justify-content: center;
-        line-height: 28px;
-        img {
-          width: 14px;
-          height: 14px;
-          margin-right: 6px;
-        }
-        .price {
-          font-size: 16px;
-          margin-right: 6px;
-        }
-        .unit {
-          font-size: 12px;
-        } 
+      img {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        margin-bottom: 24px;
       }
-      .ant-btn {
-        border-radius: 0;
+      .title {
+        color: black;
+        font-size: 20px;
+        margin-bottom: 6px;
       }
-    } 
+      .merchant {
+        margin-bottom: 6px;
+      }
+      .description {
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
+      .stock {
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+    }
+    .panel {
+      flex-grow: 1;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column-reverse;
+      .purchase {
+        border: 1px solid black;
+        border-radius: 4px;
+        overflow: hidden;
+        align-items: center;
+        height: 34px;
+        .price-information {
+          display: flex;
+          flex-direction: row;
+          align-items: baseline;
+          justify-content: center;
+          line-height: 28px;
+          img {
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
+          }
+          .price {
+            font-size: 16px;
+            margin-right: 6px;
+          }
+          .unit {
+            font-size: 12px;
+          } 
+        }
+        .ant-btn {
+          border-color: transparent;
+          border-radius: 0;
+        }
+      } 
+    }
   }
 }

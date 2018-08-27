@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button, Row, Col } from 'antd'
+import { Card, Button, Row, Col, Tag } from 'antd'
 import _ from 'lodash'
 import logoEthereum from '../../assets/logo-ethereum-white.png'
 import './index.less'
@@ -7,7 +7,7 @@ import './index.less'
 class ProductCard extends React.Component {
   constructor(props) {
     super(props)
-    this.handlePurchaseButtonOnClick = this.handlePurchaseButtonOnClick.bind(this) 
+    this.handlePurchaseButtonOnClick = this.handlePurchaseButtonOnClick.bind(this)
   }
 
   handlePurchaseButtonOnClick() {
@@ -18,22 +18,30 @@ class ProductCard extends React.Component {
   render() {
     const { product } = this.props
     const {
-      0: id,
-      1: storeId,
-      2: price,
-      3: count,
-      4: enabled,
-      5: name,
-      6: description,
-      7: imageUrl,
+      id,
+      storeId,
+      price,
+      count,
+      enabled,
+      name,
+      description,
+      imageUrl,
+      store,
     } = product
-    
+
     const notAvailable = (count === '0' || !enabled)
     return (
-      <Card className='product-card'>
-        <div>
+      <Card hoverable className='product-card'>
+        <div className='information'>
           <img src={imageUrl} alt={name} />
           <div className='title'><b>{name}</b></div>
+          {
+            store && (
+              <div className='merchant'>
+                {store.name}
+              </div>)
+          }
+          <div className='stock'>{count === '0' ? <Tag color='red'>Sold Out</Tag> : `${count} Left`}</div>
           <div className='description'>
             {
               _.truncate(description, {
@@ -42,28 +50,29 @@ class ProductCard extends React.Component {
               })
             }
           </div>
-          <div className='stock'>{count === '0' ? 'No Stock' : `${count} Left`}</div>
         </div>
-        <Row className='purchase'>
-          <Col span={12}>
-            <div className='price-information'>
-              <img src={logoEthereum} alt='ether' />
-              <div className='price'>{window.web3.fromWei(price, 'ether')}</div>
-              <div className='unit'>ETH</div>
-            </div>
-          </Col>
-          <Col span={12}>
-            <Button
-              block
-              disabled={notAvailable}
-              type='primary'
-              icon={notAvailable ? null : 'shopping-cart'}
-              onClick={this.handlePurchaseButtonOnClick}
-            >
-              {notAvailable ? 'Not Available' : 'Purchase'}
-            </Button>
-          </Col>
-        </Row>
+        <div className='panel'>
+          <Row className='purchase'>
+            <Col span={12}>
+              <div className='price-information'>
+                <img src={logoEthereum} alt='ether' />
+                <div className='price'>{window.web3.fromWei(price, 'ether')}</div>
+                <div className='unit'>ETH</div>
+              </div>
+            </Col>
+            <Col span={12}>
+              <Button
+                block
+                disabled={notAvailable}
+                type='primary'
+                icon={notAvailable ? null : 'shopping-cart'}
+                onClick={this.handlePurchaseButtonOnClick}
+              >
+                {notAvailable ? 'Not Available' : 'Purchase'}
+              </Button>
+            </Col>
+          </Row>
+        </div>
       </Card>
     )
   }
