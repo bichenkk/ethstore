@@ -7,7 +7,7 @@ import AppLayout from '../../components/AppLayout'
 import StoreCard from '../../components/StoreCard'
 import getContractMethodValue from '../../utils/getContractMethodValue'
 
-class StoreList extends React.Component {
+class AdminStoreList extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
@@ -50,7 +50,7 @@ class StoreList extends React.Component {
   }
 }
 
-StoreList.contextTypes = {
+AdminStoreList.contextTypes = {
   drizzle: PropTypes.object,
 }
 
@@ -63,4 +63,4 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = () => ({})
 
-export default drizzleConnect(StoreList, mapStateToProps, mapDispatchToProps)
+export default drizzleConnect(AdminStoreList, mapStateToProps, mapDispatchToProps)

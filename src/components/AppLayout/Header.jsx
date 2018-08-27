@@ -55,9 +55,9 @@ class Header extends React.Component {
               <SubMenu
                 title='Admin Portal'
               >
-                <Menu.Item key='admin_add_store'>Add Store</Menu.Item>
-                <Menu.Item key='admin_manage_stores'>Manage Stores</Menu.Item>
-                <Menu.Item key='admin_manage_products'>Manage Products</Menu.Item>
+                <Menu.Item key='admin_store_form'>Add Store</Menu.Item>
+                <Menu.Item key='admin_store_list'>Manage Stores</Menu.Item>
+                <Menu.Item key='admin_product_list'>Manage Products</Menu.Item>
               </SubMenu>
             }
             {

@@ -1,13 +1,13 @@
 import React from 'react'
-import { Row, Col, Breadcrumb } from 'antd'
+import { Row, Table, Breadcrumb } from 'antd'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
-import StoreCard from '../../components/StoreCard'
+import BooleanStatus from '../../components/BooleanStatus'
 import getContractMethodValue from '../../utils/getContractMethodValue'
 
-class StoreList extends React.Component {
+class AdminStoreList extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
@@ -32,25 +32,50 @@ class StoreList extends React.Component {
       .map(dataKey => getContractMethodValue(EthStore, 'stores', dataKey))
       .filter(store => store && Object.keys(store).length > 0 && store.enabled)
     ) || []
+    const columns = [
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
+        sorter: true,
+      }, {
+        title: 'Store Owner',
+        dataIndex: 'storeOwner',
+        key: 'storeOwner',
+      }, {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+      }, {
+        title: 'imageUrl',
+        dataIndex: 'imageUrl',
+        key: 'imageUrl',
+      }, {
+        title: 'productCount',
+        dataIndex: 'productCount',
+        key: 'productCount',
+      },
+    ]
     return (
       <AppLayout>
         <Breadcrumb separator='>'>
           <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
-          <Breadcrumb.Item>Stores</Breadcrumb.Item>
+          <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
+          <Breadcrumb.Item>Manage Products</Breadcrumb.Item>
         </Breadcrumb>
         <Row gutter={24} style={{ marginTop: '24px' }}>
-          {stores.map(store => (
-            <Col style={{ marginBottom: '24px' }} span={24} key={`col-storecard-${store[0]}`}>
-              <StoreCard store={store} />
-            </Col>
-          ))}
+          <Table
+            rowKey={record => `item-row-${record.id}`}
+            columns={columns}
+            dataSource={stores}
+          />
         </Row>
       </AppLayout>
     )
   }
 }
 
-StoreList.contextTypes = {
+AdminStoreList.contextTypes = {
   drizzle: PropTypes.object,
 }
 
@@ -63,4 +88,4 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = () => ({})
 
-export default drizzleConnect(StoreList, mapStateToProps, mapDispatchToProps)
+export default drizzleConnect(AdminStoreList, mapStateToProps, mapDispatchToProps)

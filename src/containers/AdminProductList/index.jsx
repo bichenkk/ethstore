@@ -1,13 +1,13 @@
 import React from 'react'
-import { Row, Col, message, Breadcrumb } from 'antd'
+import { Row, Table, message, Breadcrumb, Button } from 'antd'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
 import IntroductionCard from '../../components/IntroductionCard'
-import ProductCard from '../../components/ProductCard'
+import BooleanStatus from '../../components/BooleanStatus'
+import ImagePreview from '../../components/ImagePreview'
 import getContractMethodValue from '../../utils/getContractMethodValue'
-import './index.less'
 
 class Home extends React.Component {
   constructor(props, context) {
@@ -16,7 +16,7 @@ class Home extends React.Component {
     this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
     this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
     this.productCountDataKey = this.EthStore.methods.productCount.cacheCall()
-    this.handleProductCardOnPurchase = this.handleProductCardOnPurchase.bind(this)
+    this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
     const currentProductCount = getContractMethodValue(this.props.EthStore, 'productCount', this.productCountDataKey) || 0
     this.productDataKeys = (currentProductCount > 0 && _.range(currentProductCount)
       .map((item, index) => this.EthStore.methods.products.cacheCall(index)))
@@ -40,12 +40,9 @@ class Home extends React.Component {
     }
   }
 
-  async handleProductCardOnPurchase(product) {
-    const productId = product[0]
-    const productPrice = product[2]
+  async handleItemButtonOnClick(productId, enabled) {
     try {
-      await this.EthStore.methods.purchaseProduct(productId).send({
-        value: productPrice,
+      await this.EthStore.methods.enableProduct(productId, enabled).send({
         gasLimit: '500000',
       })
     } catch (error) {
@@ -57,11 +54,11 @@ class Home extends React.Component {
     const { EthStore } = this.props
     const products = (this.productDataKeys && this.productDataKeys
       .map(dataKey => getContractMethodValue(EthStore, 'products', dataKey))
-      .filter(product => product && Object.keys(product).length > 0 && product.enabled)
+      .filter(product => product && Object.keys(product).length > 0)
     ) || []
     const stores = (this.storeDataKeys && this.storeDataKeys
       .map(dataKey => getContractMethodValue(EthStore, 'stores', dataKey))
-      .filter(store => store && Object.keys(store).length > 0 && store.enabled)
+      .filter(store => store && Object.keys(store).length > 0)
     ) || []
     const storeMap = stores.reduce((prev, item) => {
       const id = item[0]
@@ -74,20 +71,65 @@ class Home extends React.Component {
       const store = storeMap[item.storeId]
       return { ...item, store }
     })
+    const columns = [
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
+        sorter: true,
+      }, {
+        title: 'Store',
+        dataIndex: 'store',
+        key: 'store',
+        render: value => `${(value && value.name) || 'NA'}`,
+      }, {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+      }, {
+        title: 'Price',
+        dataIndex: 'price',
+        key: 'price',
+        render: value => `${window.web3.fromWei(value, 'ether')} ETH`,
+      }, {
+        title: 'Inventory',
+        dataIndex: 'count',
+        key: 'count',
+      }, {
+        title: 'Enabled',
+        dataIndex: 'enabled',
+        key: 'enabled',
+        render: value => <BooleanStatus value={value} />,
+      }, {
+        title: 'Image',
+        dataIndex: 'imageUrl',
+        key: 'imageUrl',
+        render: value => <ImagePreview src={value} />,
+      },
+      {
+        dataIndex: 'action',
+        key: 'action',
+        render: (value, record) => (
+          <Button onClick={() => this.handleItemButtonOnClick(record.id, !record.enabled)}>
+            {record.enabled ? 'Disable' : 'Enable' }
+          </Button>
+        ),
+      },
+    ]
     return (
       <AppLayout>
         <div>
-          <IntroductionCard />
           <Breadcrumb separator='>'>
             <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
+            <Breadcrumb.Item>Manage Products</Breadcrumb.Item>
           </Breadcrumb>
           <Row gutter={24} style={{ marginTop: '24px' }}>
-            {productsWithStore.map(product => (
-              <Col style={{ marginBottom: '24px' }} span={8} key={`col-productcard-${product[0]}`}>
-                <ProductCard product={product} onPurchase={this.handleProductCardOnPurchase} />
-              </Col>
-            ))}
+            <Table
+              rowKey={record => `item-row-${record.id}`}
+              columns={columns}
+              dataSource={productsWithStore}
+            />
           </Row>
         </div>
       </AppLayout>
