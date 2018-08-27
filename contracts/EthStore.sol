@@ -49,6 +49,7 @@ contract EthStore is Ownable {
   uint256 public storeCount = 0;
   uint256 public productCount = 0;
   uint256 public transactionCount = 0;
+  bool private lockBalances;
 
   /** @dev Constructor of EthStore. Will create sample stores and products.
     */
@@ -216,6 +217,8 @@ contract EthStore is Ownable {
     */
   function purchaseProduct(uint256 _productId) public payable {
     require(_productId > 0 && _productId <= productCount);
+    require(!lockBalances);
+    lockBalances = true;
     Product storage product = products[_productId.sub(1)];
     require(product.enabled && msg.value >= product.price && product.count > 0);
     product.count = product.count.sub(1);
@@ -228,14 +231,18 @@ contract EthStore is Ownable {
     if (msg.value > product.price) {
       msg.sender.transfer(msg.value.sub(product.price));
     }
+    lockBalances = false;
   }
 
   /** @dev Withdraw the contract balance of the address
     */
   function withdrawBalance() public {
+    require(!lockBalances);
+    lockBalances = true;
     uint256 amount = addressToBalance[msg.sender];
     addressToBalance[msg.sender] = 0;
     msg.sender.transfer(amount);
+    lockBalances = false;
   }
 
 }
