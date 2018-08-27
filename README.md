@@ -65,6 +65,8 @@ Follow the steps:
     * start webpack and open EthStore React.js app on http://localhost:3000
 
 4. Open MetaMask on Chrome. Choose network Localhost 8545 and import account with private key generated from ganache.
+> Do Not Choose MetaMask Beta
+<img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/metamask-instruction.png">
 
 5. You should be able to see the EthStore dapp. Have fun!
 
