@@ -16,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "contract:reset": "rm -rf build && truffle compile && truffle migrate",
     "contract:test": "truffle test",
-    "kickstart": "npm run contract:reset && npm run start"
+    "kickstart": "yarn && npm run contract:reset && npm run start"
   },
   "dependencies": {
     "@download/blockies": "^1.0.3",
