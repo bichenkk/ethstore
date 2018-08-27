@@ -10,19 +10,19 @@ This is a marketplace running on Ethereum network.
 Creator of this contract will become the administrator of the marketplace. He can add addresses into EthStore to allow them become store owners and create online stores with ether payment.
 Store owners can list products. When there is someone purchased the product, the payment will be sent to the EthStore contract and store owner can withdraw.
 
-Administrator can
-* create store for addresses
-* enable / disable store
+  Administrator can
+  * create store for addresses
+  * enable / disable store
 
-Store owners can
-* edit store information
-* add products
-* edit product information
+  Store owners can
+  * edit store information
+  * add products
+  * edit product information
 
-Everyone can
-* purchase products
-* withdraw their own balances on contract
-* view transactions
+  Everyone can
+  * purchase products
+  * withdraw their own balances on contract
+  * view transactions
 
 ## How to set it up on local development server?
 
@@ -31,6 +31,8 @@ Make sure you have installed
 * git
 * yarn
 * MetaMask
+
+Follow the steps:
 
 1. Install Truffle and Ganache CLI globally. Truffle is the smart contract development framework for Ethereum and Ganache is the personal blockchain running locally for development.
     ```javascript
@@ -70,11 +72,12 @@ Make sure you have installed
 
 You can start running test with truffle. It tries to cover most core functions in the EthStore contract.
 
-    ```javascript
-    // Inside ethstore
-    // Start running test on local Ganache with port 8545
-    truffle test
-    ```
+```javascript
+// Inside ethstore
+// Start running test on local Ganache with port 8545
+truffle test
+```
+
 The tests basically checks if
 * the creator of the contract has the administrator right
 * only administrator can create stores for addresses
