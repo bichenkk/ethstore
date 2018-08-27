@@ -7,12 +7,12 @@ contract EthStore is Ownable {
 
   using SafeMath for uint256;
 
-  event NewStore(uint256 id, address storeOwner, bool enabled, string name, string imageUrl, uint256 productCount);
-  event NewProduct(uint256 id, uint256 storeId, uint256 price, uint256 count, bool enabled, string name, string imageUrl);
+  event NewStore(uint256 id, address storeOwner);
+  event NewProduct(uint256 id, uint256 storeId);
   event NewTransaction(address buyer, uint256 productId, uint256 price);
 
   struct Store {
-    uint256 id;
+    uint256 id; // start from 1
     address storeOwner;
     bool enabled;
     string name;
@@ -22,7 +22,7 @@ contract EthStore is Ownable {
   }
 
   struct Product {
-    uint256 id;
+    uint256 id; // start from 1
     uint256 storeId;
     uint256 price;
     uint256 count;
@@ -67,53 +67,56 @@ contract EthStore is Ownable {
       "https://s3-ap-southeast-1.amazonaws.com/binatir.dev/wallet-trezor-model-t.jpg",
       3 ether,
       10);
-    enableProduct(productCount.sub(1), false);
+    enableProduct(productCount, false);
   }
 
   modifier onlyStoreOwner() {
     uint256 storeId = storeOwnerToStoreId[msg.sender];
-    require(storeId >= 0 && storeId < storeCount);
-    require(stores[storeId].enabled);
+    require(storeId > 0 && storeId <= storeCount && stores[storeId.sub(1)].enabled);
     _;
   }
 
-  function getIdentity() view public returns (bool isAdministrator, bool isStoreOwner){
+  function getIdentity() view public returns (bool isAdministrator, bool isStoreOwner) {
     uint256 storeId = storeOwnerToStoreId[msg.sender];
-    return (msg.sender == owner, storeId >= 0 && storeId < storeCount && stores[storeId].enabled);
+    return (msg.sender == owner, storeId > 0 && storeId <= storeCount && stores[storeId.sub(1)].enabled);
   }
 
   function createStore(address _storeOwner) public onlyOwner {
     // create a store for the store owner
-    storeOwnerToStoreId[_storeOwner] = storeCount;
-    storeCount = stores.push(Store(storeCount, _storeOwner, true, "", "", "", 0));
-    Store storage store = stores[storeCount.sub(1)];
-    emit NewStore(store.id, store.storeOwner, store.enabled, store.name, store.imageUrl, store.productCount);
+    uint256 storeId = storeCount + 1;
+    storeCount = stores.push(Store(storeId, _storeOwner, true, "", "", "", 0));
+    storeOwnerToStoreId[_storeOwner] = storeId;
+    emit NewStore(storeId, _storeOwner);
   }
 
   function editStore(string _name, string _description, string _imageUrl) public onlyStoreOwner {
-    Store storage store = stores[storeOwnerToStoreId[msg.sender]];
+    Store storage store = stores[storeOwnerToStoreId[msg.sender].sub(1)];
     store.name = _name;
     store.description = _description;
     store.imageUrl = _imageUrl;
   }
 
   function enableStore(uint256 _storeId, bool _enabled) public onlyOwner {
-    Store storage store = stores[_storeId];
+    require(_storeId > 0 && _storeId <= storeCount);
+    Store storage store = stores[_storeId.sub(1)];
     store.enabled = _enabled;
   }
 
   function addProduct(string _name, string _description, string _imageUrl, uint256 _price, uint256 _count) public onlyStoreOwner {
-    Store storage store = stores[storeOwnerToStoreId[msg.sender]];
-    storeIdToProductIds[store.id].push(productCount);
-    productCount = products.push(Product(productCount, store.id, _price, _count, true, _name, _description, _imageUrl));
+    uint256 storeId = storeOwnerToStoreId[msg.sender];
+    Store storage store = stores[storeId.sub(1)];
+    uint256 productId = productCount + 1;
+    storeIdToProductIds[store.id].push(productId);
+    productCount = products.push(Product(productId, store.id, _price, _count, true, _name, _description, _imageUrl));
     store.productCount = store.productCount.add(1);
-    Product storage product = products[productCount.sub(1)];
-    emit NewProduct(product.id, product.storeId, product.price, product.count, product.enabled, product.name, product.imageUrl);
+    emit NewProduct(productId, store.id);
   }
 
   function editProduct(uint256 _productId, string _name, string _description, string _imageUrl, uint256 _price, uint256 _count) public onlyStoreOwner {
-    Store storage store = stores[storeOwnerToStoreId[msg.sender]];
-    Product storage product = products[_productId];
+    require(_productId > 0 && _productId <= productCount);
+    uint256 storeId = storeOwnerToStoreId[msg.sender];
+    Store storage store = stores[storeId.sub(1)];
+    Product storage product = products[_productId.sub(1)];
     require(product.storeId == store.id);
     product.name = _name;
     product.description = _description;
@@ -123,18 +126,17 @@ contract EthStore is Ownable {
   }
 
   function enableProduct(uint256 _productId, bool _enabled) public onlyOwner {
-    Product storage product = products[_productId];
+    require(_productId > 0 && _productId <= productCount);
+    Product storage product = products[_productId.sub(1)];
     product.enabled = _enabled;
   }
 
   function purchaseProduct(uint256 _productId) public payable {
-    require(_productId >= 0 && _productId < productCount);
-    Product storage product = products[_productId];
-    require(product.enabled);
-    require(msg.value >= product.price);
-    require(product.count > 0);
-    Store storage store = stores[product.storeId];
+    require(_productId > 0 && _productId <= productCount);
+    Product storage product = products[_productId.sub(1)];
+    require(product.enabled && msg.value >= product.price && product.count > 0);
     product.count = product.count.sub(1);
+    Store storage store = stores[product.storeId.sub(1)];
     addressToBalance[store.storeOwner] = addressToBalance[store.storeOwner].add(product.price);
     // refund extra amount
     if (msg.value > product.price) {
