@@ -85,3 +85,15 @@ The tests basically checks if
 * store owners can edit their product
 * administrator can disable products
 * users have the correct identities
+
+## Library used
+
+Etherum Contract
+* Truffle
+* OpenZeppelin, Ownable contract and SafeMath library
+
+EthStore Web App
+* React.js
+* Redux.js
+* Drizzle
+* web3
