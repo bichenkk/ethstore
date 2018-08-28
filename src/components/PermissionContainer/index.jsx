@@ -15,7 +15,6 @@ class PermissionContainer extends Component {
   }
 
   render() {
-    return this.props.children
     const { EthStore } = this.props
     const getIdentity = getContractMethodValue(EthStore, 'getIdentity', this.getIdentityDataKey) || {}
     if (this.props.permission === 'administrator' && getIdentity.isAdministrator) {
