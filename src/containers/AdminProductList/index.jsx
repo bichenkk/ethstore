@@ -13,11 +13,11 @@ class AdminProductList extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
+    this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
     if (this.EthStore) {
       this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
       this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
       this.productCountDataKey = this.EthStore.methods.productCount.cacheCall()
-      this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
       const currentProductCount = getContractMethodValue(this.props.EthStore, 'productCount', this.productCountDataKey) || 0
       this.productDataKeys = (currentProductCount > 0 && _.range(currentProductCount)
         .map((item, index) => this.EthStore.methods.products.cacheCall(index)))

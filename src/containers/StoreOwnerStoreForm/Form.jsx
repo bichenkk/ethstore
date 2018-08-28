@@ -62,7 +62,7 @@ class ItemForm extends React.Component {
             htmlType='button'
             onClick={this.handleOnSubmit}
           >
-              Create a Store
+              Edit Store
           </Button>
         </FormItem>
       </Form>

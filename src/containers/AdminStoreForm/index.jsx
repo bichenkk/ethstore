@@ -13,8 +13,8 @@ class AdminStoreForm extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
+    this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
     if (this.EthStore) {
-      this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
     }
   }
 

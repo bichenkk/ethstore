@@ -1,86 +1,89 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import { Row, Card, Breadcrumb, message } from 'antd'
+import { withRouter } from 'react-router-dom'
+import { drizzleConnect } from 'drizzle-react'
+import PropTypes from 'prop-types'
+import _ from 'lodash'
+import AppLayout from '../../components/AppLayout'
+import { editForm } from '../../actions/storeOwnerProductForm'
+import PermissionContainer from '../../components/PermissionContainer'
+import Form from './Form'
 
-const FormItem = Form.Item
-
-class ItemForm extends React.Component {
+class StoreOwnerProductForm extends React.Component {
   constructor(props, context) {
     super(props, context)
-    this.handleOnSubmit = this.handleOnSubmit.bind(this)
+    this.EthStore = context.drizzle.contracts.EthStore
+    this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
+    if (this.EthStore) {
+    }
   }
 
-  handleOnSubmit(e) {
-    e.preventDefault()
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (err) {
-        return
+  async handleFormOnSubmit(values) {
+    const {
+      name,
+      description,
+      imageUrl,
+      price,
+      count,
+    } = values
+    const weiPrice = window.web3.toWei(price)
+    if (this.props.type === 'create') {
+      try {
+        await this.EthStore.methods.addProduct(name, description, imageUrl, weiPrice, count).send({
+          gasLimit: '500000',
+        })
+        message.success('You have created the product successfully.')
+        this.props.history.push(`/store_owner_product_list`)
+      } catch (error) {
+        message.error(error.message)
       }
-      this.props.onSubmit(values)
-    })
+    }
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 7 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-        md: { span: 10 },
-      },
-    }
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 12,
-          offset: 7,
-        },
-      },
-    }
     return (
-      <Form onSubmit={this.handleOnSubmit}>
-        <FormItem label='Address' {...formItemLayout}>
-          {getFieldDecorator('address', {
-            rules: [{
-              required: true,
-              type: 'string',
-              whitespace: true,
-              message: 'Please input a valid address.',
-            }],
-          })(<Input placeholder='0x0000000000000000000000000000000000000000' />)}
-        </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button
-            type='primary'
-            htmlType='button'
-            onClick={this.handleOnSubmit}
-          >
-              Create a Store
-          </Button>
-        </FormItem>
-      </Form>
+      <AppLayout>
+        <PermissionContainer permission='storeOwner'>
+          <Breadcrumb separator='>'>
+            <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
+            <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
+            <Breadcrumb.Item>Add New Store</Breadcrumb.Item>
+          </Breadcrumb>
+          <Row gutter={24} style={{ marginTop: '24px' }}>
+            <Card title='Add New Product'>
+              <Form
+                onSubmit={this.handleFormOnSubmit}
+                onFieldsChange={this.props.editForm}
+                formFieldValues={this.props.formFieldValues}
+                isEditItemLoading={this.props.isEditItemLoading}
+              />
+            </Card>
+          </Row>
+        </PermissionContainer>
+      </AppLayout>
     )
   }
 }
 
-const CustomizedForm = Form.create({
-  onFieldsChange(props, changedFields) {
-    props.onFieldsChange(changedFields)
-  },
-  mapPropsToFields(props) {
-    const { formFieldValues = {} } = props
-    const fields = ['address'].reduce((prev, key) => (
-      { ...prev, [key]: Form.createFormField(formFieldValues[key]) }
-    ), {})
-    return fields
-  },
-})(ItemForm)
+StoreOwnerProductForm.contextTypes = {
+  drizzle: PropTypes.object,
+}
 
-export default CustomizedForm
+const mapStateToProps = (state) => {
+  const {
+    formFieldValues,
+  } = state.storeOwnerProductForm
+  return {
+    formFieldValues,
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  editForm: formFieldsChange => dispatch(editForm(formFieldsChange)),
+})
+
+export default withRouter(drizzleConnect(
+  StoreOwnerProductForm,
+  mapStateToProps,
+  mapDispatchToProps,
+))

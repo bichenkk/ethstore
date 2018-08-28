@@ -28,7 +28,7 @@ export default class App extends React.Component {
             <Route exact path='/admin_product_list' component={AdminProductList} />
             <Route exact path='/admin_transaction_list' component={AdminTransactionList} />
             <Route exact path='/store_owner_store_form' component={StoreOwnerStoreForm} />
-            <Route exact path='/store_owner_product_form' component={StoreOwnerProductForm} />
+            <Route exact path='/store_owner_product_form' component={props => <StoreOwnerProductForm {...props} type='create' />} />
             <Route exact path='/store_owner_product_list' component={StoreOwnerProductList} />
             <Route exact path='/store_owner_transaction_list' component={StoreOwnerTransactionList} />
             <Route component={NotFound} />

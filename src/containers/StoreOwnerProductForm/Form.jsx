@@ -1,7 +1,8 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, InputNumber } from 'antd'
 
 const FormItem = Form.Item
+const { TextArea } = Input
 
 class ItemForm extends React.Component {
   constructor(props, context) {
@@ -46,15 +47,56 @@ class ItemForm extends React.Component {
     }
     return (
       <Form onSubmit={this.handleOnSubmit}>
-        <FormItem label='Address' {...formItemLayout}>
-          {getFieldDecorator('address', {
+        <FormItem label='Product Name' {...formItemLayout}>
+          {getFieldDecorator('name', {
             rules: [{
               required: true,
               type: 'string',
               whitespace: true,
-              message: 'Please input a valid address.',
+              message: 'Please input a valid name.',
             }],
-          })(<Input placeholder='0x0000000000000000000000000000000000000000' />)}
+          })(<Input />)}
+        </FormItem>
+        <FormItem label='Description' {...formItemLayout}>
+          {getFieldDecorator('description', {
+            rules: [{
+              required: true,
+              type: 'string',
+              whitespace: true,
+              message: 'Please input a valid name.',
+            }],
+          })(<TextArea rows={2} />)}
+        </FormItem>
+        <FormItem label='Image URL' {...formItemLayout}>
+          {getFieldDecorator('imageUrl', {
+            rules: [{
+              required: true,
+              type: 'url',
+              whitespace: true,
+              message: 'Please input a valid URL.',
+            }],
+            initialValue: 'https://s3-ap-southeast-1.amazonaws.com/binatir.dev/store-0.png',
+          })(<Input />)}
+        </FormItem>
+        <FormItem label='Price (ETH)' {...formItemLayout}>
+          {getFieldDecorator('price', {
+            rules: [{
+              required: true,
+              type: 'integer',
+              whitespace: true,
+              message: 'Please input a valid number.',
+            }],
+          })(<InputNumber addonAfter='ETH' />)}
+        </FormItem>
+        <FormItem label='Inventory Number' {...formItemLayout}>
+          {getFieldDecorator('count', {
+            rules: [{
+              required: true,
+              type: 'integer',
+              whitespace: true,
+              message: 'Please input a valid number.',
+            }],
+          })(<InputNumber />)}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button
@@ -62,7 +104,7 @@ class ItemForm extends React.Component {
             htmlType='button'
             onClick={this.handleOnSubmit}
           >
-              Create a Store
+              Create Product
           </Button>
         </FormItem>
       </Form>
