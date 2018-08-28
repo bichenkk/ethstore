@@ -104,7 +104,7 @@ class ItemForm extends React.Component {
             htmlType='button'
             onClick={this.handleOnSubmit}
           >
-              Create Product
+            {this.props.type === 'create' ? 'Create Product' : 'Edit Product'}
           </Button>
         </FormItem>
       </Form>
@@ -118,7 +118,7 @@ const CustomizedForm = Form.create({
   },
   mapPropsToFields(props) {
     const { formFieldValues = {} } = props
-    const fields = ['address'].reduce((prev, key) => (
+    const fields = ['name', 'description', 'imageUrl', 'price', 'count'].reduce((prev, key) => (
       { ...prev, [key]: Form.createFormField(formFieldValues[key]) }
     ), {})
     return fields

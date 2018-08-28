@@ -1,8 +1,8 @@
-import { ADMINSTOREFORM_EDITFORM_CHANGE } from '../constants/actionTypes'
+import { STOREOWNERPRODUCTFORM_EDITFORM_CHANGE } from '../constants/actionTypes'
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case ADMINSTOREFORM_EDITFORM_CHANGE:
+    case STOREOWNERPRODUCTFORM_EDITFORM_CHANGE:
       return {
         ...state,
         formFieldValues: { ...state.formFieldValues, ...action.field },

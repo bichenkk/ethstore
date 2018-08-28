@@ -42,6 +42,7 @@ class StoreOwnerProductList extends React.Component {
   }
 
   async handleItemButtonOnClick(productId) {
+    this.props.history.push(`/store_owner_product_form/${productId}`)
   }
 
   render() {
@@ -85,15 +86,15 @@ class StoreOwnerProductList extends React.Component {
         key: 'imageUrl',
         render: value => <ImagePreview src={value} />,
       },
-      // {
-      //   dataIndex: 'action',
-      //   key: 'action',
-      //   render: (value, record) => (
-      //     <Button onClick={() => this.handleItemButtonOnClick(record.id)}>
-      //       View
-      //     </Button>
-      //   ),
-      // },
+      {
+        dataIndex: 'action',
+        key: 'action',
+        render: (value, record) => (
+          <Button onClick={() => this.handleItemButtonOnClick(record.id)}>
+            Edit
+          </Button>
+        ),
+      },
     ]
     return (
       <AppLayout>
