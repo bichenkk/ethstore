@@ -105,13 +105,15 @@ class StoreOwnerProductForm extends React.Component {
           </Breadcrumb>
           <Row gutter={24} style={{ marginTop: '24px' }}>
             <Card title={type === 'create' ? 'Add New Product' : 'Edit Product'}>
-              <Form
-                type={type}
-                onSubmit={this.handleFormOnSubmit}
-                onFieldsChange={this.props.editForm}
-                formFieldValues={this.props.formFieldValues}
-                isEditItemLoading={this.props.isEditItemLoading}
-              />
+              {(type === 'create' || (type === 'edit' && this.product)) &&
+                <Form
+                  type={type}
+                  onSubmit={this.handleFormOnSubmit}
+                  onFieldsChange={this.props.editForm}
+                  formFieldValues={this.props.formFieldValues}
+                  isEditItemLoading={this.props.isEditItemLoading}
+                />
+              }
             </Card>
           </Row>
         </PermissionContainer>
