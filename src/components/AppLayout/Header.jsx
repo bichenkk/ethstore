@@ -102,23 +102,9 @@ Header.contextTypes = {
   drizzle: PropTypes.object,
 }
 
-const mapStateToProps = (state) => {
-  const {
-    formFieldValues,
-    isWithdrawalLoading,
-    isWithdrawalSuccess,
-    withdrawalTransaction,
-    withdrawalError,
-  } = state.app
-  return {
-    formFieldValues,
-    isWithdrawalLoading,
-    isWithdrawalSuccess,
-    withdrawalTransaction,
-    withdrawalError,
-    accounts: state.accounts,
-    EthStore: state.contracts.EthStore,
-  }
-}
+const mapStateToProps = state => ({
+  accounts: state.accounts,
+  EthStore: state.contracts.EthStore,
+})
 
 export default withRouter(drizzleConnect(Header, mapStateToProps))
