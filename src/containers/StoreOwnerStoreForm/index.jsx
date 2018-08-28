@@ -1,86 +1,105 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import { Row, Card, Breadcrumb, message } from 'antd'
+import { withRouter } from 'react-router-dom'
+import { drizzleConnect } from 'drizzle-react'
+import PropTypes from 'prop-types'
+import _ from 'lodash'
+import AppLayout from '../../components/AppLayout'
+import { editForm } from '../../actions/storeOwnerStoreForm'
+import PermissionContainer from '../../components/PermissionContainer'
+import Form from './Form'
+import getContractMethodValue from '../../utils/getContractMethodValue'
+import getFieldFromItem from '../../utils/getFieldFromItem'
 
-const FormItem = Form.Item
-
-class ItemForm extends React.Component {
+class StoreOwnerStoreForm extends React.Component {
   constructor(props, context) {
     super(props, context)
-    this.handleOnSubmit = this.handleOnSubmit.bind(this)
+    this.EthStore = context.drizzle.contracts.EthStore
+    this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
+    this.storeOwnerToStoreIdDataKey = this.EthStore.methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
+    if (this.EthStore) {
+      const storeId = getContractMethodValue(this.props.EthStore, 'storeOwnerToStoreId', this.storeOwnerToStoreIdDataKey)
+      this.storeDataKey = storeId && this.EthStore.methods.stores.cacheCall(storeId - 1)
+      this.store = this.storeDataKey && storeId && getContractMethodValue(this.props.EthStore, 'stores', this.storeDataKey)
+    }
   }
 
-  handleOnSubmit(e) {
-    e.preventDefault()
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (err) {
-        return
+  componentWillReceiveProps(nextProps) {
+    const currentStoreId = getContractMethodValue(this.props.EthStore, 'storeOwnerToStoreId', this.storeOwnerToStoreIdDataKey) || 0
+    const nextStoreId = getContractMethodValue(nextProps.EthStore, 'storeOwnerToStoreId', this.storeOwnerToStoreIdDataKey) || 0
+    if (currentStoreId !== nextStoreId || !this.store) {
+      this.storeDataKey = nextStoreId && this.EthStore.methods.stores.cacheCall(nextStoreId - 1)
+      this.store = this.storeDataKey && nextStoreId && getContractMethodValue(this.props.EthStore, 'stores', this.storeDataKey)
+      if (this.store) {
+        const field = getFieldFromItem(
+          this.store,
+          ['name', 'description', 'imageUrl'],
+        )
+        this.props.editForm(field)
       }
-      this.props.onSubmit(values)
-    })
+    }
+  }
+
+  async handleFormOnSubmit(values) {
+    const {
+      name,
+      description,
+      imageUrl,
+    } = values
+    try {
+      await this.EthStore.methods.editStore(name, description, imageUrl).send({
+        gasLimit: '500000',
+      })
+      message.success('You have edited the store successfully.')
+    } catch (error) {
+      message.error(error.message)
+    }
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 7 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-        md: { span: 10 },
-      },
-    }
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 12,
-          offset: 7,
-        },
-      },
-    }
     return (
-      <Form onSubmit={this.handleOnSubmit}>
-        <FormItem label='Address' {...formItemLayout}>
-          {getFieldDecorator('address', {
-            rules: [{
-              required: true,
-              type: 'string',
-              whitespace: true,
-              message: 'Please input a valid address.',
-            }],
-          })(<Input placeholder='0x0000000000000000000000000000000000000000' />)}
-        </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button
-            type='primary'
-            htmlType='button'
-            onClick={this.handleOnSubmit}
-          >
-              Edit Store
-          </Button>
-        </FormItem>
-      </Form>
+      <AppLayout>
+        <PermissionContainer permission='storeOwner'>
+          <Breadcrumb separator='>'>
+            <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
+            <Breadcrumb.Item>Store Owner Portal</Breadcrumb.Item>
+            <Breadcrumb.Item>Edit Store</Breadcrumb.Item>
+          </Breadcrumb>
+          <Row gutter={24} style={{ marginTop: '24px' }}>
+            <Card title='Edit Store'>
+              {
+                this.store && <Form
+                  onSubmit={this.handleFormOnSubmit}
+                  onFieldsChange={this.props.editForm}
+                  formFieldValues={this.props.formFieldValues}
+                  isEditItemLoading={this.props.isEditItemLoading}
+                />
+              }
+            </Card>
+          </Row>
+        </PermissionContainer>
+      </AppLayout>
     )
   }
 }
 
-const CustomizedForm = Form.create({
-  onFieldsChange(props, changedFields) {
-    props.onFieldsChange(changedFields)
-  },
-  mapPropsToFields(props) {
-    const { formFieldValues = {} } = props
-    const fields = ['address'].reduce((prev, key) => (
-      { ...prev, [key]: Form.createFormField(formFieldValues[key]) }
-    ), {})
-    return fields
-  },
-})(ItemForm)
+StoreOwnerStoreForm.contextTypes = {
+  drizzle: PropTypes.object,
+}
 
-export default CustomizedForm
+const mapStateToProps = (state) => {
+  const {
+    formFieldValues,
+  } = state.storeOwnerStoreForm
+  return {
+    formFieldValues,
+    accounts: state.accounts,
+    EthStore: state.contracts.EthStore,
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  editForm: formFieldsChange => dispatch(editForm(formFieldsChange)),
+})
+
+export default withRouter(drizzleConnect(StoreOwnerStoreForm, mapStateToProps, mapDispatchToProps))

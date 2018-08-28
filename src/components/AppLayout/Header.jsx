@@ -73,7 +73,7 @@ class Header extends React.Component {
               <SubMenu
                 title='Store Owner Portal'
               >
-                {/* <Menu.Item key='store_owner_store_form'>Edit Store</Menu.Item> */}
+                <Menu.Item key='store_owner_store_form'>Edit Store</Menu.Item>
                 <Menu.Item key='store_owner_product_form'>Add Product</Menu.Item>
                 <Menu.Item key='store_owner_product_list'>Manage Products</Menu.Item>
                 <Menu.Item key='store_owner_transaction_list'>Transactions</Menu.Item>

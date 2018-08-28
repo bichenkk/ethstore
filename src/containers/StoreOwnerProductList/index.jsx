@@ -51,7 +51,7 @@ class StoreOwnerProductList extends React.Component {
       .filter(product => product
         && Object.keys(product).length > 0)
     ) || []
-    const storeId = getContractMethodValue(this.props.EthStore, 'storeOwnerToStoreId', this.storeOwnerToStoreIdDataKey)
+    const storeId = getContractMethodValue(EthStore, 'storeOwnerToStoreId', this.storeOwnerToStoreIdDataKey)
     const productsWithStore = products
       .filter(item => item.storeId && item.storeId === storeId)
     const store = this.storeDataKey && storeId && getContractMethodValue(EthStore, 'stores', this.storeDataKey)
