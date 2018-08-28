@@ -6,6 +6,11 @@ import StoreList from '../StoreList'
 import AdminStoreForm from '../AdminStoreForm'
 import AdminStoreList from '../AdminStoreList'
 import AdminProductList from '../AdminProductList'
+import AdminTransactionList from '../AdminTransactionList'
+import StoreOwnerProductForm from '../StoreOwnerProductForm'
+import StoreOwnerProductList from '../StoreOwnerProductList'
+import StoreOwnerTransactionList from '../StoreOwnerTransactionList'
+import StoreOwnerStoreForm from '../StoreOwnerStoreForm'
 import NotFound from '../NotFound'
 import './index.less'
 
@@ -21,6 +26,11 @@ export default class App extends React.Component {
             <Route exact path='/admin_store_form' component={AdminStoreForm} />
             <Route exact path='/admin_store_list' component={AdminStoreList} />
             <Route exact path='/admin_product_list' component={AdminProductList} />
+            <Route exact path='/admin_transaction_list' component={AdminTransactionList} />
+            <Route exact path='/store_owner_store_form' component={StoreOwnerStoreForm} />
+            <Route exact path='/store_owner_product_form' component={StoreOwnerProductForm} />
+            <Route exact path='/store_owner_product_list' component={StoreOwnerProductList} />
+            <Route exact path='/store_owner_transaction_list' component={StoreOwnerTransactionList} />
             <Route component={NotFound} />
           </Switch>
         </BrowserRouter>

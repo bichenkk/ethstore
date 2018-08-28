@@ -63,18 +63,20 @@ class Header extends React.Component {
                 <Menu.Item key='admin_store_form'>Add New Store</Menu.Item>
                 <Menu.Item key='admin_store_list'>Manage Stores</Menu.Item>
                 <Menu.Item key='admin_product_list'>Manage Products</Menu.Item>
+                <Menu.Item key='admin_transaction_list'>Transactions</Menu.Item>
               </SubMenu>
             }
-            {/* {
+            {
               getIdentity.isStoreOwner &&
               <SubMenu
                 title='Store Owner Portal'
               >
-                <Menu.Item key='store_owner_edit_store'>Edit Store</Menu.Item>
-                <Menu.Item key='store_owner_add_product'>Add Product</Menu.Item>
-                <Menu.Item key='store_owner_manage_products'>Manage Products</Menu.Item>
+                {/* <Menu.Item key='store_owner_store_form'>Edit Store</Menu.Item>
+                <Menu.Item key='store_owner_product_form'>Add Product</Menu.Item> */}
+                <Menu.Item key='store_owner_product_list'>Manage Products</Menu.Item>
+                <Menu.Item key='store_owner_transaction_list'>Transactions</Menu.Item>
               </SubMenu>
-            } */}
+            }
           </Menu>
           <div className='balance-bar'>
             <div className='balance'>

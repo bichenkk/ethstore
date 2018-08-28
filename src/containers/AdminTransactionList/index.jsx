@@ -8,28 +8,28 @@ import BooleanStatus from '../../components/BooleanStatus'
 import ImagePreview from '../../components/ImagePreview'
 import getContractMethodValue from '../../utils/getContractMethodValue'
 
-class AdminProductList extends React.Component {
+class AdminTransactionList extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
     this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
     this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
-    this.productCountDataKey = this.EthStore.methods.productCount.cacheCall()
+    this.transactionCountDataKey = this.EthStore.methods.transactionCount.cacheCall()
     this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
-    const currentProductCount = getContractMethodValue(this.props.EthStore, 'productCount', this.productCountDataKey) || 0
-    this.productDataKeys = (currentProductCount > 0 && _.range(currentProductCount)
-      .map((item, index) => this.EthStore.methods.products.cacheCall(index)))
+    const currentTransactionCount = getContractMethodValue(this.props.EthStore, 'transactionCount', this.transactionCountDataKey) || 0
+    this.transactionDataKeys = (currentTransactionCount > 0 && _.range(currentTransactionCount)
+      .map((item, index) => this.EthStore.methods.transactions.cacheCall(index)))
     const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
     this.storeDataKeys = (currentStoreCount > 0 && _.range(currentStoreCount)
       .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentProductCount = getContractMethodValue(this.props.EthStore, 'productCount', this.productCountDataKey) || 0
-    const nextProductCount = getContractMethodValue(nextProps.EthStore, 'productCount', this.productCountDataKey) || 0
-    if (currentProductCount !== nextProductCount) {
-      this.productDataKeys = (nextProductCount > 0 && _.range(nextProductCount)
-        .map((item, index) => this.EthStore.methods.products.cacheCall(index)))
+    const currentTransactionCount = getContractMethodValue(this.props.EthStore, 'transactionCount', this.transactionCountDataKey) || 0
+    const nextTransactionCount = getContractMethodValue(nextProps.EthStore, 'transactionCount', this.transactionCountDataKey) || 0
+    if (currentTransactionCount !== nextTransactionCount) {
+      this.transactionDataKeys = (nextTransactionCount > 0 && _.range(nextTransactionCount)
+        .map((item, index) => this.EthStore.methods.transactions.cacheCall(index)))
     }
     const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
     const nextStoreCount = getContractMethodValue(nextProps.EthStore, 'storeCount', this.storeCountDataKey) || 0
@@ -39,9 +39,9 @@ class AdminProductList extends React.Component {
     }
   }
 
-  async handleItemButtonOnClick(productId, enabled) {
+  async handleItemButtonOnClick(transactionId, enabled) {
     try {
-      await this.EthStore.methods.enableProduct(productId, enabled).send({
+      await this.EthStore.methods.enableTransaction(transactionId, enabled).send({
         gasLimit: '500000',
       })
       message.success('You have made the change successfully.')
@@ -52,9 +52,9 @@ class AdminProductList extends React.Component {
 
   render() {
     const { EthStore } = this.props
-    const products = (this.productDataKeys && this.productDataKeys
-      .map(dataKey => getContractMethodValue(EthStore, 'products', dataKey))
-      .filter(product => product && Object.keys(product).length > 0)
+    const transactions = (this.transactionDataKeys && this.transactionDataKeys
+      .map(dataKey => getContractMethodValue(EthStore, 'transactions', dataKey))
+      .filter(transaction => transaction && Object.keys(transaction).length > 0)
     ) || []
     const stores = (this.storeDataKeys && this.storeDataKeys
       .map(dataKey => getContractMethodValue(EthStore, 'stores', dataKey))
@@ -67,7 +67,7 @@ class AdminProductList extends React.Component {
         [id]: Object.assign(item),
       }
     }, {})
-    const productsWithStore = products.map((item) => {
+    const transactionsWithStore = transactions.map((item) => {
       const store = storeMap[item.storeId]
       return { ...item, store }
     })
@@ -78,41 +78,22 @@ class AdminProductList extends React.Component {
         key: 'id',
         sorter: true,
       }, {
-        title: 'Store',
-        dataIndex: 'store',
-        key: 'store',
-        render: value => `${(value && value.name) || 'N/A'}`,
+        title: 'Store ID',
+        dataIndex: 'storeId',
+        key: 'storeId',
       }, {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
+        title: 'Transaction ID',
+        dataIndex: 'productId',
+        key: 'productId',
+      }, {
+        title: 'Buyer',
+        dataIndex: 'buyer',
+        key: 'buyer',
       }, {
         title: 'Price',
         dataIndex: 'price',
         key: 'price',
         render: value => `${window.web3.fromWei(value, 'ether')} ETH`,
-      }, {
-        title: 'Inventory',
-        dataIndex: 'count',
-        key: 'count',
-      }, {
-        title: 'Enabled',
-        dataIndex: 'enabled',
-        key: 'enabled',
-        render: value => <BooleanStatus value={value} />,
-      }, {
-        title: 'Image',
-        dataIndex: 'imageUrl',
-        key: 'imageUrl',
-        render: value => <ImagePreview src={value} />,
-      }, {
-        dataIndex: 'action',
-        key: 'action',
-        render: (value, record) => (
-          <Button onClick={() => this.handleItemButtonOnClick(record.id, !record.enabled)}>
-            {record.enabled ? 'Disable' : 'Enable' }
-          </Button>
-        ),
       },
     ]
     return (
@@ -121,13 +102,13 @@ class AdminProductList extends React.Component {
           <Breadcrumb separator='>'>
             <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
             <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
-            <Breadcrumb.Item>Manage Products</Breadcrumb.Item>
+            <Breadcrumb.Item>Manage Transactions</Breadcrumb.Item>
           </Breadcrumb>
           <Row gutter={24} style={{ marginTop: '24px' }}>
             <Table
               rowKey={record => `item-row-${record.id}`}
               columns={columns}
-              dataSource={productsWithStore}
+              dataSource={transactionsWithStore}
             />
           </Row>
         </div>
@@ -136,7 +117,7 @@ class AdminProductList extends React.Component {
   }
 }
 
-AdminProductList.contextTypes = {
+AdminTransactionList.contextTypes = {
   drizzle: PropTypes.object,
 }
 
@@ -149,4 +130,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = () => ({})
 
-export default drizzleConnect(AdminProductList, mapStateToProps, mapDispatchToProps)
+export default drizzleConnect(AdminTransactionList, mapStateToProps, mapDispatchToProps)
