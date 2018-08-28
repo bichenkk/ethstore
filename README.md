@@ -120,6 +120,14 @@ The tests basically checks if
 * the emergency stop stops purchases and withdrawals
 * only administrator can stop the contract
 
+## Design Pattern Decisions
+
+See `design_pattern_decisions.md`
+
+## Avoiding Common Attacks
+
+See `avoiding_common_attacks.md`
+
 ## Library used
 
 Ethereum Contract
