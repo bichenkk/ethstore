@@ -102,12 +102,10 @@ Home.contextTypes = {
   drizzle: PropTypes.object,
 }
 
-const mapStateToProps = (state) => {
-  return {
-    accounts: state.accounts,
-    EthStore: state.contracts.EthStore,
-  }
-}
+const mapStateToProps = state => ({
+  accounts: state.accounts,
+  EthStore: state.contracts.EthStore,
+})
 
 const mapDispatchToProps = () => ({})
 

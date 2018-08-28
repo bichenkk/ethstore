@@ -3,7 +3,6 @@ import { Row, Card, Breadcrumb, message } from 'antd'
 import { withRouter } from 'react-router-dom'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
 import { editForm } from '../../actions/adminStoreForm'
 import PermissionContainer from '../../components/PermissionContainer'
@@ -14,8 +13,6 @@ class AdminStoreForm extends React.Component {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
     this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
-    if (this.EthStore) {
-    }
   }
 
   async handleFormOnSubmit(values) {

@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-const getContractMethodValue = (contract, methodName, dataKey) => {
-  return contract && dataKey && _.get(contract, `${methodName}.${dataKey}.value`)
-}
+const getContractMethodValue = (contract, methodName, dataKey) => (
+  contract && dataKey && _.get(contract, `${methodName}.${dataKey}.value`)
+)
 
 export default getContractMethodValue

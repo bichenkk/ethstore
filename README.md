@@ -4,7 +4,7 @@
 
 This is the final project of Online Marketplace on Ethereum network by KK Chen, kk@bichenkk.com.
 
-## What does your project do?
+## What does this project do?
 
 This is a marketplace running on Ethereum network.
 Creator of this contract will become the administrator of the marketplace. He can add addresses into EthStore to allow them become store owners and create online stores with ether payment.

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Icon, Button } from 'antd'
+import { Card, Icon } from 'antd'
 import logoEthStore from '../../assets/logo-ethstore-horizontal.png'
 import './index.less'
 

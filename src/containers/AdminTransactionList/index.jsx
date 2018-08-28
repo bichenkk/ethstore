@@ -1,11 +1,9 @@
 import React from 'react'
-import { Row, Table, message, Breadcrumb, Button } from 'antd'
+import { Row, Table, message, Breadcrumb } from 'antd'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
-import BooleanStatus from '../../components/BooleanStatus'
-import ImagePreview from '../../components/ImagePreview'
 import getContractMethodValue from '../../utils/getContractMethodValue'
 import PermissionContainer from '../../components/PermissionContainer'
 
@@ -124,12 +122,10 @@ AdminTransactionList.contextTypes = {
   drizzle: PropTypes.object,
 }
 
-const mapStateToProps = (state) => {
-  return {
-    accounts: state.accounts,
-    EthStore: state.contracts.EthStore,
-  }
-}
+const mapStateToProps = state => ({
+  accounts: state.accounts,
+  EthStore: state.contracts.EthStore,
+})
 
 const mapDispatchToProps = () => ({})
 
