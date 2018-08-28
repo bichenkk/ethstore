@@ -19,7 +19,19 @@ class DrizzleContainer extends React.Component {
 
   render() {
     const { web3, accounts, drizzleStatus } = this.props
-    if (web3.status === 'failed') {
+    if (!window.web3) {
+      return (
+        <div className='drizzle-container'>
+          <img src={logoEthStore} alt='EthStore' />
+          <Card hoverable className='reminder-card'>
+            <img width='100' src={logoMetaMask} alt='MetaMask' />
+            <h1>No MetaMask Installed</h1>
+            Please install MetaMask in order to use EthStore.
+            <div><Button type='dashed' icon='reload' onClick={this.handleReloadButtonOnClick}>Reload</Button></div>
+          </Card>
+        </div>
+      )
+    } else if (web3.status === 'failed') {
       return (
         <div className='drizzle-container'>
           <img src={logoEthStore} alt='EthStore' />
@@ -35,7 +47,6 @@ class DrizzleContainer extends React.Component {
       )
     } else if (web3.status === 'initialized' && Object.keys(accounts).length === 0) {
       return (
-
         <div className='drizzle-container'>
           <img src={logoEthStore} alt='EthStore' />
           <Card hoverable className='reminder-card'>
