@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
 import { editForm } from '../../actions/adminStoreForm'
+import PermissionContainer from '../../components/PermissionContainer'
 import Form from './Form'
 
 class AdminStoreForm extends React.Component {
@@ -30,21 +31,23 @@ class AdminStoreForm extends React.Component {
   render() {
     return (
       <AppLayout>
-        <Breadcrumb separator='>'>
-          <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
-          <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
-          <Breadcrumb.Item>Add New Store</Breadcrumb.Item>
-        </Breadcrumb>
-        <Row gutter={24} style={{ marginTop: '24px' }}>
-          <Card title='Add New Store'>
-            <Form
-              onSubmit={this.handleFormOnSubmit}
-              onFieldsChange={this.props.editForm}
-              formFieldValues={this.props.formFieldValues}
-              isEditItemLoading={this.props.isEditItemLoading}
-            />
-          </Card>
-        </Row>
+        <PermissionContainer permission='administrator'>
+          <Breadcrumb separator='>'>
+            <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
+            <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
+            <Breadcrumb.Item>Add New Store</Breadcrumb.Item>
+          </Breadcrumb>
+          <Row gutter={24} style={{ marginTop: '24px' }}>
+            <Card title='Add New Store'>
+              <Form
+                onSubmit={this.handleFormOnSubmit}
+                onFieldsChange={this.props.editForm}
+                formFieldValues={this.props.formFieldValues}
+                isEditItemLoading={this.props.isEditItemLoading}
+              />
+            </Card>
+          </Row>
+        </PermissionContainer>
       </AppLayout>
     )
   }

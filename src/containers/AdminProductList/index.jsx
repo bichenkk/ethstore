@@ -7,6 +7,7 @@ import AppLayout from '../../components/AppLayout'
 import BooleanStatus from '../../components/BooleanStatus'
 import ImagePreview from '../../components/ImagePreview'
 import getContractMethodValue from '../../utils/getContractMethodValue'
+import PermissionContainer from '../../components/PermissionContainer'
 
 class AdminProductList extends React.Component {
   constructor(props, context) {
@@ -117,7 +118,7 @@ class AdminProductList extends React.Component {
     ]
     return (
       <AppLayout>
-        <div>
+        <PermissionContainer permission='administrator'>
           <Breadcrumb separator='>'>
             <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
             <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
@@ -130,7 +131,7 @@ class AdminProductList extends React.Component {
               dataSource={productsWithStore}
             />
           </Row>
-        </div>
+        </PermissionContainer>
       </AppLayout>
     )
   }

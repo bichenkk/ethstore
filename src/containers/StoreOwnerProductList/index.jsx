@@ -7,6 +7,7 @@ import AppLayout from '../../components/AppLayout'
 import BooleanStatus from '../../components/BooleanStatus'
 import ImagePreview from '../../components/ImagePreview'
 import StoreCard from '../../components/StoreCard'
+import PermissionContainer from '../../components/PermissionContainer'
 import getContractMethodValue from '../../utils/getContractMethodValue'
 
 class StoreOwnerProductList extends React.Component {
@@ -96,7 +97,7 @@ class StoreOwnerProductList extends React.Component {
     ]
     return (
       <AppLayout>
-        <div>
+        <PermissionContainer permission='storeOwner'>
           <Breadcrumb separator='>'>
             <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
             <Breadcrumb.Item>Store Owner Portal</Breadcrumb.Item>
@@ -112,7 +113,7 @@ class StoreOwnerProductList extends React.Component {
               dataSource={productsWithStore}
             />
           </Row>
-        </div>
+        </PermissionContainer>
       </AppLayout>
     )
   }

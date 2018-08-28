@@ -4,8 +4,7 @@ import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
-import BooleanStatus from '../../components/BooleanStatus'
-import ImagePreview from '../../components/ImagePreview'
+import PermissionContainer from '../../components/PermissionContainer'
 import StoreCard from '../../components/StoreCard'
 import getContractMethodValue from '../../utils/getContractMethodValue'
 
@@ -77,7 +76,7 @@ class StoreOwnerTransactionList extends React.Component {
     ]
     return (
       <AppLayout>
-        <div>
+        <PermissionContainer permission='storeOwner'>
           <Breadcrumb separator='>'>
             <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
             <Breadcrumb.Item>Store Owner Portal</Breadcrumb.Item>
@@ -93,7 +92,7 @@ class StoreOwnerTransactionList extends React.Component {
               dataSource={transactionsWithStore}
             />
           </Row>
-        </div>
+        </PermissionContainer>
       </AppLayout>
     )
   }
