@@ -18,8 +18,6 @@ class ProductCard extends React.Component {
   render() {
     const { product } = this.props
     const {
-      id,
-      storeId,
       price,
       count,
       enabled,
