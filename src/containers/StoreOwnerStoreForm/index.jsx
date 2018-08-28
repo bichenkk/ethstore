@@ -3,7 +3,6 @@ import { Row, Card, Breadcrumb, message } from 'antd'
 import { withRouter } from 'react-router-dom'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
 import { editForm } from '../../actions/storeOwnerStoreForm'
 import PermissionContainer from '../../components/PermissionContainer'
@@ -17,7 +16,8 @@ class StoreOwnerStoreForm extends React.Component {
     this.EthStore = context.drizzle.contracts.EthStore
     this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
     if (this.EthStore) {
-      this.storeOwnerToStoreIdDataKey = this.EthStore.methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
+      this.storeOwnerToStoreIdDataKey = this.EthStore
+        .methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
       const storeId = getContractMethodValue(this.props.EthStore, 'storeOwnerToStoreId', this.storeOwnerToStoreIdDataKey)
       this.storeDataKey = storeId && this.EthStore.methods.stores.cacheCall(storeId - 1)
       this.store = this.storeDataKey && storeId && getContractMethodValue(this.props.EthStore, 'stores', this.storeDataKey)

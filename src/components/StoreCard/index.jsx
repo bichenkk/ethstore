@@ -1,6 +1,6 @@
 import React from 'react'
 import { createIcon } from '@download/blockies'
-import { Card, Button, Row, Col, Tag } from 'antd'
+import { Card } from 'antd'
 import _ from 'lodash'
 import './index.less'
 
@@ -8,9 +8,7 @@ class StoreCard extends React.Component {
   render() {
     const { store } = this.props
     const {
-      id,
       storeOwner,
-      enabled,
       name,
       description,
       imageUrl,

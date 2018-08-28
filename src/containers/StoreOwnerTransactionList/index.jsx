@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Table, Breadcrumb, Button } from 'antd'
+import { Row, Table, Breadcrumb } from 'antd'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -12,10 +12,10 @@ class StoreOwnerTransactionList extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
-    this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
     if (this.EthStore) {
       this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
-      this.storeOwnerToStoreIdDataKey = this.EthStore.methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
+      this.storeOwnerToStoreIdDataKey = this.EthStore
+        .methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
       this.transactionCountDataKey = this.EthStore.methods.transactionCount.cacheCall()
       const currentTransactionCount = getContractMethodValue(this.props.EthStore, 'transactionCount', this.transactionCountDataKey) || 0
       this.transactionDataKeys = (currentTransactionCount > 0 && _.range(currentTransactionCount)
@@ -37,9 +37,6 @@ class StoreOwnerTransactionList extends React.Component {
     if (currentStoreId !== nextStoreId) {
       this.storeDataKey = nextStoreId && this.EthStore.methods.stores.cacheCall(nextStoreId - 1)
     }
-  }
-
-  async handleItemButtonOnClick(transactionId) {
   }
 
   render() {
@@ -102,12 +99,10 @@ StoreOwnerTransactionList.contextTypes = {
   drizzle: PropTypes.object,
 }
 
-const mapStateToProps = (state) => {
-  return {
-    accounts: state.accounts,
-    EthStore: state.contracts.EthStore,
-  }
-}
+const mapStateToProps = state => ({
+  accounts: state.accounts,
+  EthStore: state.contracts.EthStore,
+})
 
 const mapDispatchToProps = () => ({})
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu, Button, message } from 'antd'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import logoEthStoreHorizontal from '../../assets/logo-ethstore-horizontal.png'
@@ -46,7 +46,9 @@ class Header extends React.Component {
       <div className='header' >
         <div className='navigation-bar'>
           <div className='left-part'>
-            <img className='logo' src={logoEthStoreHorizontal} alt='EthStore' />
+            <Link to='/'>
+              <img className='logo' src={logoEthStoreHorizontal} alt='EthStore' />
+            </Link>
           </div>
           <div className='right-part'>
             <UserProfile />

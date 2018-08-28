@@ -17,7 +17,8 @@ class StoreOwnerProductList extends React.Component {
     this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
     if (this.EthStore) {
       this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
-      this.storeOwnerToStoreIdDataKey = this.EthStore.methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
+      this.storeOwnerToStoreIdDataKey = this.EthStore
+        .methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
       this.productCountDataKey = this.EthStore.methods.productCount.cacheCall()
       const currentProductCount = getContractMethodValue(this.props.EthStore, 'productCount', this.productCountDataKey) || 0
       this.productDataKeys = (currentProductCount > 0 && _.range(currentProductCount)
@@ -124,12 +125,10 @@ StoreOwnerProductList.contextTypes = {
   drizzle: PropTypes.object,
 }
 
-const mapStateToProps = (state) => {
-  return {
-    accounts: state.accounts,
-    EthStore: state.contracts.EthStore,
-  }
-}
+const mapStateToProps = state => ({
+  accounts: state.accounts,
+  EthStore: state.contracts.EthStore,
+})
 
 const mapDispatchToProps = () => ({})
 

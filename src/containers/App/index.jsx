@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import DrizzleContainer from '../../components/DrizzleContainer'
 import Home from '../Home'
 import StoreList from '../StoreList'
+import StoreProductList from '../StoreProductList'
 import AdminStoreForm from '../AdminStoreForm'
 import AdminStoreList from '../AdminStoreList'
 import AdminProductList from '../AdminProductList'
@@ -23,6 +24,7 @@ export default class App extends React.Component {
             <Route exact path='/' component={() => <Redirect to='/home' />} />
             <Route exact path='/home' component={Home} />
             <Route exact path='/store_list' component={StoreList} />
+            <Route exact path='/store_list/:storeId' component={StoreProductList} />
             <Route exact path='/admin_store_form' component={AdminStoreForm} />
             <Route exact path='/admin_store_list' component={AdminStoreList} />
             <Route exact path='/admin_product_list' component={AdminProductList} />

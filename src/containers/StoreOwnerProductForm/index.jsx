@@ -3,7 +3,6 @@ import { Row, Card, Breadcrumb, message } from 'antd'
 import { withRouter } from 'react-router-dom'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import AppLayout from '../../components/AppLayout'
 import { editForm } from '../../actions/storeOwnerProductForm'
 import PermissionContainer from '../../components/PermissionContainer'
@@ -83,9 +82,10 @@ class StoreOwnerProductForm extends React.Component {
     } else if (this.props.type === 'edit') {
       const { productId } = this.props.match.params
       try {
-        await this.EthStore.methods.editProduct(productId, name, description, imageUrl, weiPrice, count).send({
-          gasLimit: '500000',
-        })
+        await this.EthStore
+          .methods.editProduct(productId, name, description, imageUrl, weiPrice, count).send({
+            gasLimit: '500000',
+          })
         message.success('You have edited the product successfully.')
       } catch (error) {
         message.error(error.message)

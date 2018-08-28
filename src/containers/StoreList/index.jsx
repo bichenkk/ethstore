@@ -1,5 +1,6 @@
 import React from 'react'
 import { Row, Col, Breadcrumb } from 'antd'
+import { Link } from 'react-router-dom'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -43,7 +44,9 @@ class StoreList extends React.Component {
         <Row gutter={24} style={{ marginTop: '24px' }}>
           {stores.map(store => (
             <Col style={{ marginBottom: '24px' }} span={24} key={`col-storecard-${store[0]}`}>
-              <StoreCard store={store} />
+              <Link to={`/store_list/${store.id}`}>
+                <StoreCard store={store} />
+              </Link>
             </Col>
           ))}
         </Row>
