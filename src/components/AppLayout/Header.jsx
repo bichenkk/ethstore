@@ -17,9 +17,11 @@ class Header extends React.Component {
     this.handleMenuItemOnClick = this.handleMenuItemOnClick.bind(this)
     this.handleWithdrawButtonOnClick = this.handleWithdrawButtonOnClick.bind(this)
     this.EthStore = context.drizzle.contracts.EthStore
-    this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
-    this.addressToBalanceDataKey = this.EthStore.methods.addressToBalance
-      .cacheCall(this.props.accounts[0])
+    if (this.EthStore) {
+      this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
+      this.addressToBalanceDataKey = this.EthStore.methods.addressToBalance
+        .cacheCall(this.props.accounts[0])
+    }
   }
 
   async handleWithdrawButtonOnClick() {

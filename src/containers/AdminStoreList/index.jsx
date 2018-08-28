@@ -13,11 +13,13 @@ class AdminStoreList extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
-    this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
-    this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
-    const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
-    this.storeDataKeys = (currentStoreCount > 0 && _.range(currentStoreCount)
-      .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
+    if (this.EthStore) {
+      this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
+      this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
+      const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
+      this.storeDataKeys = (currentStoreCount > 0 && _.range(currentStoreCount)
+        .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
+    }
   }
 
   componentWillReceiveProps(nextProps) {

@@ -7,7 +7,9 @@ class PermissionContainer extends Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
-    this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
+    if (this.EthStore) {
+      this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
+    }
   }
 
   render() {

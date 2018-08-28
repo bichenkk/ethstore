@@ -13,16 +13,18 @@ class AdminTransactionList extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
-    this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
-    this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
-    this.transactionCountDataKey = this.EthStore.methods.transactionCount.cacheCall()
-    this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
-    const currentTransactionCount = getContractMethodValue(this.props.EthStore, 'transactionCount', this.transactionCountDataKey) || 0
-    this.transactionDataKeys = (currentTransactionCount > 0 && _.range(currentTransactionCount)
-      .map((item, index) => this.EthStore.methods.transactions.cacheCall(index)))
-    const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
-    this.storeDataKeys = (currentStoreCount > 0 && _.range(currentStoreCount)
-      .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
+    if (this.EthStore) {
+      this.getIdentityDataKey = this.EthStore.methods.getIdentity.cacheCall()
+      this.storeCountDataKey = this.EthStore.methods.storeCount.cacheCall()
+      this.transactionCountDataKey = this.EthStore.methods.transactionCount.cacheCall()
+      this.handleItemButtonOnClick = this.handleItemButtonOnClick.bind(this)
+      const currentTransactionCount = getContractMethodValue(this.props.EthStore, 'transactionCount', this.transactionCountDataKey) || 0
+      this.transactionDataKeys = (currentTransactionCount > 0 && _.range(currentTransactionCount)
+        .map((item, index) => this.EthStore.methods.transactions.cacheCall(index)))
+      const currentStoreCount = getContractMethodValue(this.props.EthStore, 'storeCount', this.storeCountDataKey) || 0
+      this.storeDataKeys = (currentStoreCount > 0 && _.range(currentStoreCount)
+        .map((item, index) => this.EthStore.methods.stores.cacheCall(index)))
+    }
   }
 
   componentWillReceiveProps(nextProps) {
