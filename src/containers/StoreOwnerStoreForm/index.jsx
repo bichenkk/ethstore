@@ -16,8 +16,8 @@ class StoreOwnerStoreForm extends React.Component {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
     this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
-    this.storeOwnerToStoreIdDataKey = this.EthStore.methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
     if (this.EthStore) {
+      this.storeOwnerToStoreIdDataKey = this.EthStore.methods.storeOwnerToStoreId.cacheCall(this.props.accounts[0])
       const storeId = getContractMethodValue(this.props.EthStore, 'storeOwnerToStoreId', this.storeOwnerToStoreIdDataKey)
       this.storeDataKey = storeId && this.EthStore.methods.stores.cacheCall(storeId - 1)
       this.store = this.storeDataKey && storeId && getContractMethodValue(this.props.EthStore, 'stores', this.storeDataKey)
