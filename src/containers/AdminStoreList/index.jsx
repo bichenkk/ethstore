@@ -54,7 +54,7 @@ class AdminStoreList extends React.Component {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        render: value => value || 'NA',
+        render: value => value || 'N/A',
       }, {
         title: 'Owner',
         dataIndex: 'storeOwner',

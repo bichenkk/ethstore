@@ -60,7 +60,7 @@ class Header extends React.Component {
                 <Menu.Item key='admin_product_list'>Manage Products</Menu.Item>
               </SubMenu>
             }
-            {
+            {/* {
               getIdentity.isStoreOwner &&
               <SubMenu
                 title='Store Owner Portal'
@@ -69,7 +69,7 @@ class Header extends React.Component {
                 <Menu.Item key='store_owner_add_product'>Add Product</Menu.Item>
                 <Menu.Item key='store_owner_manage_products'>Manage Products</Menu.Item>
               </SubMenu>
-            }
+            } */}
           </Menu>
           <div className='balance-bar'>
             <div className='balance'>

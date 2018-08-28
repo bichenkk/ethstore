@@ -81,7 +81,7 @@ class Home extends React.Component {
         title: 'Store',
         dataIndex: 'store',
         key: 'store',
-        render: value => `${(value && value.name) || 'NA'}`,
+        render: value => `${(value && value.name) || 'N/A'}`,
       }, {
         title: 'Name',
         dataIndex: 'name',

@@ -25,9 +25,9 @@ class StoreCard extends React.Component {
     }).toDataURL()
     return (
       <Card hoverable className='store-card'>
-        <img src={imageUrl} alt={name} />
+        <img src={imageUrl || avatar} alt={name} />
         <div className='information'>
-          <div className='title'><b>{name}</b></div>
+          <div className='title'><b>{name || 'N/A'}</b></div>
           <div className='description'>
             {
               _.truncate(description, {
