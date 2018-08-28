@@ -106,3 +106,7 @@ EthStore Web App
 * Redux.js
 * Drizzle
 * web3
+
+## License
+
+[MIT](https://raw.githubusercontent.com/bichenkk/ethstore/master/LICENSE)
