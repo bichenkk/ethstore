@@ -92,6 +92,8 @@ The tests basically checks if
 * store owners can edit their product
 * administrator can disable products
 * users have the correct identities
+* the emergency stop stops purchases and withdrawals
+* only administrator can stop the contract
 
 ## Library used
 

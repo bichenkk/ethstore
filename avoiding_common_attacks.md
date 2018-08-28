@@ -9,7 +9,7 @@ addressToBalance[msg.sender] = 0;
 msg.sender.transfer(amount);
 ```
 
-## Integer Overflow and Underflow¶
+## Integer Overflow and Underflow
 
 Through out the EthStore contract, all math calulation are performed using SafeMath.
 
@@ -19,7 +19,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 using SafeMath for uint256;
 ```
 
-## Pitfalls in Race Condition Solutions¶
+## Pitfalls in Race Condition Solutions
 
 For functions which involves addressToBalance, mutex is used to lock the state.
 
