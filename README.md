@@ -44,8 +44,8 @@ Follow the steps:
 
 2. Run the development blockchain with 3-second blocktime.
     ```javascript
-    // Run Ganache locally with 3-second blocktime on port 8545
-    ganache-cli -b 3 -p 8545
+    // Run Ganache locally with network-id 5001 and 3-second blocktime on port 8545
+    ganache-cli -b 3 -p 8545 -i 5001
     ```
 
 3. Open MetaMask on Chrome. Choose network Localhost 8545 and import account with private key Mnemonic generated from Ganache.
@@ -70,6 +70,12 @@ Follow the steps:
 5. You should be able to see the EthStore dapp. You can make purchases and switch accounts to try different roles. Have fun! 
 
 <img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/screenshot.png">
+
+If you have restarted the ganache again, you may face the problem of `TX doesn't have the correct nonce.`. You need to start your ganache everytime with a new network id so the MetaMask can recognise it is a new chain.
+```javascript
+// Run Ganache with a new network id
+ganache-cli -b 3 -p 8545 -i [new-network-id]
+```
 
 ## Test for EthStore contract
 
