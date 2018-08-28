@@ -47,7 +47,7 @@ class StoreOwnerProductForm extends React.Component {
           <Breadcrumb separator='>'>
             <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
             <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
-            <Breadcrumb.Item>Add New Store</Breadcrumb.Item>
+            <Breadcrumb.Item>Add Product</Breadcrumb.Item>
           </Breadcrumb>
           <Row gutter={24} style={{ marginTop: '24px' }}>
             <Card title='Add New Product'>
