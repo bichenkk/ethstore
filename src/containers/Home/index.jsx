@@ -73,10 +73,12 @@ class Home extends React.Component {
         [id]: Object.assign(item),
       }
     }, {})
-    const productsWithStore = products.map((item) => {
-      const store = storeMap[item.storeId]
-      return { ...item, store }
-    })
+    const productsWithStore = products
+      .map((item) => {
+        const store = storeMap[item.storeId]
+        return { ...item, store }
+      })
+      .filter(item => !!item.store)
     return (
       <AppLayout>
         <div>

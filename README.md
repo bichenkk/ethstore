@@ -77,6 +77,26 @@ If you have restarted the ganache again, you may face the problem of `TX doesn't
 ganache-cli -b 3 -p 8545 -i [new-network-id]
 ```
 
+## Sitemap of EthStore Web App
+
+General User
+* Home Page
+* Store List Page
+* Store Detail Page
+
+Admin Portal (Administrator only)
+* Add Shop Page
+* Manage Store List Page
+* Manage Product List Page
+* All Transaction List Page
+
+Store Owner Portal (Store Owner only)
+* Edit Store Page
+* Add Product Page
+* Edit Product Page
+* My Product List Page
+* My Transaction List Page
+
 ## Test for EthStore contract
 
 You can start running test with truffle. It tries to cover most core functions in the EthStore contract.
