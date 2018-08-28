@@ -20,6 +20,7 @@ class AdminStoreForm extends React.Component {
       await this.EthStore.methods.createStore(values.address).send({
         gasLimit: '500000',
       })
+      message.success('You have created the store successfully.')
       this.props.history.push(`/admin_store_list`)
     } catch (error) {
       message.error(error.message)
@@ -32,10 +33,10 @@ class AdminStoreForm extends React.Component {
         <Breadcrumb separator='>'>
           <Breadcrumb.Item><a href='/'>EthStore</a></Breadcrumb.Item>
           <Breadcrumb.Item>Admin Portal</Breadcrumb.Item>
-          <Breadcrumb.Item>Create Store</Breadcrumb.Item>
+          <Breadcrumb.Item>Add New Store</Breadcrumb.Item>
         </Breadcrumb>
         <Row gutter={24} style={{ marginTop: '24px' }}>
-          <Card title='Create New Store'>
+          <Card title='Add New Store'>
             <Form
               onSubmit={this.handleFormOnSubmit}
               onFieldsChange={this.props.editForm}

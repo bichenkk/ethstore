@@ -33,6 +33,7 @@ class AdminStoreList extends React.Component {
       await this.EthStore.methods.enableStore(storeId, enabled).send({
         gasLimit: '500000',
       })
+      message.success('You have made the change successfully.')
     } catch (error) {
       message.error(error.message)
     }

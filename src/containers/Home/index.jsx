@@ -48,6 +48,7 @@ class Home extends React.Component {
         value: productPrice,
         gasLimit: '500000',
       })
+      message.success('You have made the purchase successfully.')
     } catch (error) {
       message.error(error.message)
     }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Button } from 'antd'
+import { Menu, Button, message } from 'antd'
 import { withRouter } from 'react-router-dom'
 import { drizzleConnect } from 'drizzle-react'
 import PropTypes from 'prop-types'
@@ -23,9 +23,14 @@ class Header extends React.Component {
   }
 
   async handleWithdrawButtonOnClick() {
-    await this.EthStore.methods.withdrawBalance().send({
-      gasLimit: '500000',
-    })
+    try {
+      await this.EthStore.methods.withdrawBalance().send({
+        gasLimit: '500000',
+      })
+      message.success('You have withdrawan your balance successfully.')
+    } catch (error) {
+      message.error(error.message)
+    }
   }
 
   handleMenuItemOnClick(item) {
@@ -55,7 +60,7 @@ class Header extends React.Component {
               <SubMenu
                 title='Admin Portal'
               >
-                <Menu.Item key='admin_store_form'>Add Store</Menu.Item>
+                <Menu.Item key='admin_store_form'>Add New Store</Menu.Item>
                 <Menu.Item key='admin_store_list'>Manage Stores</Menu.Item>
                 <Menu.Item key='admin_product_list'>Manage Products</Menu.Item>
               </SubMenu>
