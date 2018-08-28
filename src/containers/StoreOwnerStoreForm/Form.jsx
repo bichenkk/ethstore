@@ -71,7 +71,6 @@ class ItemForm extends React.Component {
           {getFieldDecorator('imageUrl', {
             rules: [{
               required: true,
-              type: 'url',
               whitespace: true,
               message: 'Please input a valid URL.',
             }],
