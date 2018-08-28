@@ -24,9 +24,9 @@ using SafeMath for uint256;
 For functions which involves addressToBalance, mutex is used to lock the state.
 
 ```javascript
-require(!lockBalances);
-lockBalances = true;
+require(!isBalancesLocked);
+isBalancesLocked = true;
 addressToBalance[msg.sender] = 0;
 msg.sender.transfer(amount);
-lockBalances = false;
+isBalancesLocked = false;
 ```

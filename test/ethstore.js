@@ -210,6 +210,46 @@ contract('EthStore', (accounts) => {
     assert.equal(normalUserResult[1], false, 'The normal user has store owner identity.')
   })
 
+  it('should be able to pause purchase when the contract is emergency stopped', async () => {
+    try {
+      const instance = await EthStore.new()
+      const productValues = await instance.products(0)
+      const productId = productValues[0]
+      await instance.stopContract()
+      await instance.purchaseProduct(productId, { value: web3.toWei(15), from: normalUser })
+      assert.fail(null, null, 'It is not stopped.')
+    } catch (e) {
+      // console.log('error', e.message)
+    }
+  })
+
+  it('should be able to pause withdrawal when the contract is emergency stopped', async () => {
+    try {
+      const instance = await EthStore.new()
+      const storeId = await instance.storeOwnerToStoreId(creator)
+      const creatorBalanceBeforePurchase = await web3.eth.getBalance(creator)
+      const productValues = await instance.products(0)
+      const productPrice = productValues[2]
+      const productId = productValues[0]
+      await instance.purchaseProduct(productId, { value: web3.toWei(10), from: normalUser })
+      await instance.stopContract()
+      await instance.withdrawBalance()
+      assert.fail(null, null, 'It is not stopped.')
+    } catch (e) {
+      // console.log('error', e.message)
+    }
+  })
+
+  it('should be able to pause by creator', async () => {
+    try {
+      const instance = await EthStore.new()
+      await instance.stopContract({ from: normalUser })
+      assert.fail(null, null, 'It is not stopped.')
+    } catch (e) {
+      // console.log('error', e.message)
+    }
+  })
+
   // it('testing', async () => {
   //   const instance = await EthStore.new()
   // })
