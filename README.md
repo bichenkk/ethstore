@@ -48,8 +48,11 @@ Follow the steps:
     ganache-cli -b 3 -p 8545
     ```
 
+3. Open MetaMask on Chrome. Choose network Localhost 8545 and import account with private key Mnemonic generated from Ganache.
+> Do Not Choose MetaMask Beta
+<img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/metamask-instruction.png">
 
-3. Download and kickstart EthStore.
+4. Download and kickstart EthStore.
     ```javascript
     // Download from Github
     git clone git@github.com:bichenkk/ethstore.git
@@ -63,10 +66,6 @@ Follow the steps:
     * remove truffle build files
     * compile and migrate contracts on local development network (port:8545)
     * start webpack and open EthStore React.js app on http://localhost:3000
-
-4. Open MetaMask on Chrome. Choose network Localhost 8545 and import account with private key generated from Ganache.
-> Do Not Choose MetaMask Beta
-<img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/metamask-instruction.png">
 
 5. You should be able to see the EthStore dapp. You can make purchases and switch accounts to try different roles. Have fun! 
 
