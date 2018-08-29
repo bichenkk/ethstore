@@ -1,9 +1,10 @@
 pragma solidity ^0.4.23;
 
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+import 'openzeppelin-solidity/contracts/lifecycle/Pausable.sol';
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-contract EthStore is Ownable {
+contract EthStore is Ownable, Pausable {
 
   using SafeMath for uint256;
 
@@ -49,7 +50,6 @@ contract EthStore is Ownable {
   uint256 public storeCount = 0;
   uint256 public productCount = 0;
   uint256 public transactionCount = 0;
-  bool public isEmergencyStopped;
   bool private isBalancesLocked;
 
   /** @dev Constructor of EthStore. Will create sample stores and products.
@@ -120,13 +120,6 @@ contract EthStore is Ownable {
   modifier onlyStoreOwner() {
     uint256 storeId = storeOwnerToStoreId[msg.sender];
     require(storeId > 0 && storeId <= storeCount && stores[storeId.sub(1)].enabled);
-    _;
-  }
-
-  /** @dev Check if the contract is emergency stopped
-    */
-  modifier stoppedInEmergency() {
-    require(!isEmergencyStopped);
     _;
   }
 
@@ -224,7 +217,7 @@ contract EthStore is Ownable {
   /** @dev Purchase a product
     * @param _productId The id of the product.
     */
-  function purchaseProduct(uint256 _productId) public payable stoppedInEmergency {
+  function purchaseProduct(uint256 _productId) public payable whenNotPaused {
     require(_productId > 0 && _productId <= productCount);
     require(!isBalancesLocked);
     isBalancesLocked = true;
@@ -245,7 +238,7 @@ contract EthStore is Ownable {
 
   /** @dev Withdraw the contract balance of the address
     */
-  function withdrawBalance() public stoppedInEmergency {
+  function withdrawBalance() public whenNotPaused {
     require(!isBalancesLocked);
     isBalancesLocked = true;
     uint256 amount = addressToBalance[msg.sender];
@@ -253,13 +246,4 @@ contract EthStore is Ownable {
     msg.sender.transfer(amount);
     isBalancesLocked = false;
   }
-
-    function stopContract() public onlyOwner {
-        isEmergencyStopped = true;
-    }
-
-    function resumeContract() public onlyOwner {
-        isEmergencyStopped = false;
-    }
-
 }
