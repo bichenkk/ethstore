@@ -128,6 +128,12 @@ See `design_pattern_decisions.md`
 
 See `avoiding_common_attacks.md`
 
+## Deployed Addresses
+
+See `deployed_addresses.md`
+
+Demo https://ethstore.binatir.com/ on Rinkeby
+
 ## Library used
 
 Ethereum Contract
