@@ -12,8 +12,8 @@
   },
   "scripts": {
     "lint": "eslint ./src",
-    "start": "NODE_ENV=development webpack-dev-server --colors --config webpack.config.dev.js",
-    "build": "NODE_ENV=production webpack --config webpack.config.prod.js",
+    "start": "APP_ENV=development ETH_NETWORK=development webpack-dev-server --colors --config webpack.config.dev.js",
+    "build": "APP_ENV=production ETH_NETWORK=rinkeby webpack --config webpack.config.prod.js",
     "contract:reset": "rm -rf build && truffle compile && truffle migrate",
     "contract:test": "truffle test",
     "kickstart": "yarn && npm run contract:reset && npm run start"

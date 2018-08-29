@@ -15,7 +15,7 @@ const configureStore = () => {
   }
 
   const middlewares = [thunkMiddleware, sagaMiddleware]
-  if (process.env.NODE_ENV !== 'production') {
+  if (window.APP_ENV === 'development') {
     middlewares.push(require('redux-immutable-state-invariant').default()) // eslint-disable-line
     // middlewares.push(require('redux-logger').default) // eslint-disable-line
   }
@@ -34,7 +34,11 @@ const configureStore = () => {
     })
   }
 
-  sagaMiddleware.run(rootSaga)
+  try {
+    sagaMiddleware.run(rootSaga)
+  } catch (error) {
+    console.log(error.message)
+  }
 
   return store
 }

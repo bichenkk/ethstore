@@ -5,11 +5,8 @@ import App from './containers/App'
 import store from './store'
 import drizzleOptions from './drizzleOptions'
 
-if (process.env.NODE_ENV !== 'production') {
-  console.log('===== Development =====') // eslint-disable-line
-} else {
-  console.log('===== Production =====') // eslint-disable-line
-}
+console.log('APP_ENV = ', window.APP_ENV) // eslint-disable-line
+console.log('ETH_NETWORK = ', window.ETH_NETWORK) // eslint-disable-line
 
 ReactDOM.render(
   <DrizzleProvider options={drizzleOptions} store={store}>

@@ -2,8 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const { NODE_ENV } = process.env
-
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -23,8 +21,8 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-      'window.API_URL': JSON.stringify(process.env.API_URL),
+      'window.APP_ENV': JSON.stringify(process.env.APP_ENV),
+      'window.ETH_NETWORK': JSON.stringify(process.env.ETH_NETWORK),
     }),
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({

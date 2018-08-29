@@ -1,11 +1,17 @@
 import React from 'react'
 import { drizzleConnect } from 'drizzle-react'
 import { Card, Icon, Button } from 'antd'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import logoEthStore from '../../assets/logo-ethstore-horizontal.png'
 import logoEthereum from '../../assets/logo-ethereum-white.png'
 import logoMetaMask from '../../assets/logo-metamask.png'
+import truffleConfig from '../../../truffle'
 import './index.less'
+
+const { networks } = truffleConfig
+const { networkId } = networks[window.ETH_NETWORK]
+const networkName = _.capitalize(window.ETH_NETWORK)
 
 class DrizzleContainer extends React.Component {
   constructor(props, context) {
@@ -55,6 +61,19 @@ class DrizzleContainer extends React.Component {
             We can&apos;t find any Ethereum accounts!<br />
             Please check and make sure Metamask or your browser are pointed at the correct
              network and your account is unlocked.
+            <div><Button type='dashed' icon='reload' onClick={this.handleReloadButtonOnClick}>Reload</Button></div>
+          </Card>
+        </div>
+      )
+    } else if (web3.status === 'initialized' && networkId !== '*' && `${web3.networkId}` !== `${networkId}`) {
+      return (
+        <div className='drizzle-container'>
+          <img src={logoEthStore} alt='EthStore' />
+          <Card hoverable className='reminder-card'>
+            <img width='100' src={logoEthereum} alt='Ethereum' />
+            <h1>Not Connected to {networkName} Network</h1>
+            Please check and make sure Metamask or your browser are pointed at the correct
+             network.
             <div><Button type='dashed' icon='reload' onClick={this.handleReloadButtonOnClick}>Reload</Button></div>
           </Card>
         </div>
