@@ -5,41 +5,33 @@
 When a product is purchased, the balance is not directly transferred to the store owner. Direct transfer introduces potential security risks. Instead, it is recorded in the mapping `addressToBalance`. User can call the function `withdrawBalance` to get back their own funds.
 
 ```javascript
-mapping(address => uint256) public addressToBalance;
+  mapping(address => uint256) public addressToBalance;
 
-function withdrawBalance() public {
-  require(!isBalancesLocked);
-  isBalancesLocked = true;
-  uint256 amount = addressToBalance[msg.sender];
-  addressToBalance[msg.sender] = 0;
-  msg.sender.transfer(amount);
-  isBalancesLocked = false;
-}
+  function withdrawBalance() public whenNotPaused {
+    require(!isBalancesLocked);
+    isBalancesLocked = true;
+    uint256 amount = addressToBalance[msg.sender];
+    addressToBalance[msg.sender] = 0;
+    msg.sender.transfer(amount);
+    isBalancesLocked = false;
+  }
 ```
 
 ## Emergency Stop Pattern
 
-The contract can be emergency stopped and the purchase and withdrawal functions which involved in ether will be restricted. Only administrator can control the emergency stop.
+The contract uses Pausable contract from OpenZeppelin to implement the Emergency Stop Pattern. The contract can be paused by the creator and functions involved ether transfer will be disabled.
+
+https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/lifecycle/Pausable.sol
 
 ```javascript
-bool public isEmergencyStopped;
+  import 'openzeppelin-solidity/contracts/lifecycle/Pausable.sol';
 
-modifier stoppedInEmergency() {
-  require(!isEmergencyStopped);
-  _;
-}
-
-  function stopContract() public onlyOwner {
-      isEmergencyStopped = true;
-  }
-
-  function resumeContract() public onlyOwner {
-      isEmergencyStopped = false;
-  }
-
-  function purchaseProduct(uint256 _productId) public payable stoppedInEmergency {
+  contract EthStoreBase is Ownable, Pausable {
   ...
 
-  function withdrawBalance() public stoppedInEmergency {
+  function purchaseProduct(uint256 _productId) public payable whenNotPaused {
+  ...
+
+  function withdrawBalance() public whenNotPaused {
   ...
 ```

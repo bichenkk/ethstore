@@ -51,6 +51,7 @@ class StoreOwnerStoreForm extends React.Component {
         gasLimit: '500000',
       })
       message.success('You have edited the store successfully.')
+      this.props.history.push(`/store_owner_product_list`)
     } catch (error) {
       message.error(error.message)
     }
