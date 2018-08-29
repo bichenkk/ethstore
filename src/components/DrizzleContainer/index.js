@@ -10,7 +10,7 @@ import truffleConfig from '../../../truffle'
 import './index.less'
 
 const { networks } = truffleConfig
-const { networkId } = networks[window.ETH_NETWORK]
+const { network_id: networkId } = networks[window.ETH_NETWORK]
 const networkName = _.capitalize(window.ETH_NETWORK)
 
 class DrizzleContainer extends React.Component {
