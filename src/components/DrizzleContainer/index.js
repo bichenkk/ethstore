@@ -65,7 +65,7 @@ class DrizzleContainer extends React.Component {
           </Card>
         </div>
       )
-    } else if (web3.status === 'initialized' && networkId !== '*' && `${web3.networkId}` !== `${networkId}`) {
+    } else if (web3.status === 'initialized' && `${networkId}` !== '*' && `${web3.networkId}` !== `${networkId}`) {
       return (
         <div className='drizzle-container'>
           <img src={logoEthStore} alt='EthStore' />
