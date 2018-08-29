@@ -1,9 +1,9 @@
 pragma solidity ^0.4.23;
 
-import "./EthStore.sol";
+import "./EthStoreSample.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-contract EthStoreAdministrator is EthStore {
+contract EthStoreAdministrator is EthStoreSample {
 
   using SafeMath for uint256;
 

@@ -1,13 +1,13 @@
-var EthStore = artifacts.require("./EthStore.sol")
+var EthStoreBase = artifacts.require("./EthStoreBase.sol")
+var EthStoreSample = artifacts.require("./EthStoreSample.sol")
 var EthStoreStoreOwner = artifacts.require("./EthStoreStoreOwner.sol")
 var EthStoreAdministrator = artifacts.require("./EthStoreAdministrator.sol")
-var EthStoreSampleStore1 = artifacts.require("./EthStoreSampleStore1.sol")
-var EthStoreSampleStore2 = artifacts.require("./EthStoreSampleStore2.sol")
+var EthStore = artifacts.require("./EthStore.sol")
 
 module.exports = function (deployer) {
-  deployer.deploy(EthStore)
-  deployer.deploy(EthStoreStoreOwner)
+  deployer.deploy(EthStoreBase)
+  deployer.deploy(EthStoreSample)
   deployer.deploy(EthStoreAdministrator)
-  deployer.deploy(EthStoreSampleStore1)
-  deployer.deploy(EthStoreSampleStore2)
+  deployer.deploy(EthStoreStoreOwner)
+  deployer.deploy(EthStore)
 }

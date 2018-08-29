@@ -7,12 +7,15 @@ import AppLayout from '../../components/AppLayout'
 import { editForm } from '../../actions/adminStoreForm'
 import PermissionContainer from '../../components/PermissionContainer'
 import Form from './Form'
+import getFieldFromItem from '../../utils/getFieldFromItem'
 
 class AdminStoreForm extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.EthStore = context.drizzle.contracts.EthStore
     this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
+    const field = getFieldFromItem({}, ['address'])
+    this.props.editForm(field)
   }
 
   async handleFormOnSubmit(values) {

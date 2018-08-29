@@ -16,10 +16,7 @@ class StoreOwnerProductForm extends React.Component {
     this.EthStore = context.drizzle.contracts.EthStore
     this.handleFormOnSubmit = this.handleFormOnSubmit.bind(this)
     if (this.props.type === 'create') {
-      const field = getFieldFromItem(
-        {},
-        ['name', 'description', 'imageUrl', 'price', 'count'],
-      )
+      const field = getFieldFromItem({}, ['name', 'description', 'imageUrl', 'price', 'count'])
       this.props.editForm(field)
     }
     if (this.EthStore) {
@@ -87,6 +84,7 @@ class StoreOwnerProductForm extends React.Component {
             gasLimit: '500000',
           })
         message.success('You have edited the product successfully.')
+        this.props.history.push(`/store_owner_product_list`)
       } catch (error) {
         message.error(error.message)
       }
