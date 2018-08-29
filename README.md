@@ -79,7 +79,7 @@ Follow the steps:
 
 <img src="https://raw.githubusercontent.com/bichenkk/ethstore/master/materials/screenshot.png">
 
-If you have restarted the ganache again, you may face the problem of `TX doesn't have the correct nonce.`. You need to start your ganache everytime with a new network id so the MetaMask can recognise it is a new chain.
+If you have restarted the ganache again, you may face the problem of `TX doesn't have the correct nonce.`. You need to start your ganache everytime with a new network id and also quit Chrome and restart completely so the MetaMask can recognise it is a new chain.
 ```javascript
 // Run Ganache with a new network id
 ganache-cli -b 2 -p 8545 -i [new-network-id]
@@ -151,7 +151,9 @@ The web app is hosted on https://ethstore.binatir.com/ (Rinkeby Testnet)
 
 Ethereum Contract
 * Truffle
-* OpenZeppelin, Ownable contract and SafeMath library
+* OpenZeppelin Ownable contract
+* OpenZeppelin Pausable contract
+* OpenZeppelin SafeMath library
 
 EthStore Web App
 * React.js
