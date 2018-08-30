@@ -1,4 +1,7 @@
-import EthStore from '../build/contracts/EthStore.json'
+import EthStoreDevelopment from '../build/contracts/EthStore.json'
+import EthStoreRinkeby from '../rinkeby/contracts/EthStore.json'
+
+const EthStore = window.ETH_NETWORK === 'development' ? EthStoreDevelopment : EthStoreRinkeby
 
 const drizzleOptions = {
   // web3: {
